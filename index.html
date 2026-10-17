@@ -320,6 +320,8 @@ details.glossary summary{cursor:pointer;font-weight:700}
   .play .firebtn svg{width:42px;height:42px}
   .play .play-top .counter b{font-size:34px}
   .play .ref{font-size:15px}
+  .play .play-stats .v{font-size:28px}
+  .play .play-stats .k{font-size:12.5px}
 }
 
 .dash{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -1211,6 +1213,10 @@ function renderPlay(){
     const uList=v.upgrades.filter(u=>U[u.k]).map(u=>`<div><b>${esc(U[u.k].n)}${u.f?` (${esc(u.f.toLowerCase())})`:""}:</b> ${esc(U[u.k].note)}</div>`).join("");
     return `<article class="dash ${left===0?"wrecked":""}">
       <div class="dash-h"><b>${i+1}. ${esc(v.type)}</b><span class="note">${v.driver?`<span class="drv-name">${esc(v.driver)}</span> · `:""}${v.arch?esc(v.arch):"No archetype"}</span>${left===0?`<span class="status-pill no">Wrecked</span>`:""}</div>
+      <div class="stats play-stats">
+        ${statCell("mg","Gear",c.st.mg,c.base.mg,`<div class="gear-track" aria-hidden="true">${[1,2,3,4,5,6].map(g=>`<span class="${g<=c.st.mg?"on":""}"></span>`).join("")}</div>`)}${statCell("hd","Handling",c.st.hd,c.base.hd)}${statCell("cr","Crew",c.st.cr,c.base.cr)}${statCell("wt","Weight",c.st.wt,c.base.wt)}${statCell("ar","Armour",c.st.ar,c.base.ar)}${statCell("hl","Hull",c.st.hl,c.base.hl)}
+      </div>
+      ${(c.rules.length||sp)?`<div class="chips">${c.rules.map(r=>chip("R:"+r,r,"")).join("")}${sp?chip("S:"+sp[0],sp[2]+" ("+sp[0]+")","s"):""}</div>`:""}
 
       <div class="dash-sec"><span class="lbl">Gear (max ${c.st.mg})</span>
         <div class="gears">${[1,2,3,4,5,6].map(g=>`<button class="gbtn ${g===p.gear?"on":""}" data-act="pgear" data-i="${i}" data-g="${g}" ${g>c.st.mg?"disabled":""} aria-pressed="${g===p.gear}" aria-label="Gear ${g}">${g}</button>`).join("")}</div></div>
@@ -1227,17 +1233,15 @@ function renderPlay(){
       ${ammo.length?`<div class="dash-sec"><span class="lbl">Ammo</span>${ammo.map(a=>{ const used=(p.ammo[a.key]||0); return `<div class="ammo-row"><span>${esc(a.name)}</span><span class="ammo-boxes">${Array.from({length:a.n},(_,k)=>`<button class="ab ${a.kind==="u"?"teal":"orange"} ${k<used?"used":""}" data-act="pammo" data-i="${i}" data-key="${a.key}" data-k="${k}" aria-label="${esc(a.name)} ammo ${k+1}${k<used?", used":""}">${k<used?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>':""}</button>`).join("")}</span></div>`; }).join("")}</div>`:""}
 
       <div class="dash-row"><button class="firebtn ${p.fire?"on":""}" data-act="pfire" data-i="${i}" aria-pressed="${p.fire}"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="flame" d="M12 2C12.8 5.2 11.2 7.2 9.6 8.9C8 10.6 6.5 12.4 6.5 15C6.5 18.6 9 21.5 12 21.5C15 21.5 17.5 18.6 17.5 15C17.5 12.6 16.4 10.9 15.2 9.6C15 11.2 14.2 12.3 13.1 12.7C13.6 9.2 13.1 5.4 12 2Z"/><path class="core" d="M12.2 13.2C12.7 14.9 11.2 15.9 11.2 17.4C11.2 18.6 11.9 19.5 12.9 19.5C14 19.5 14.8 18.6 14.8 17.3C14.8 15.9 13.7 14.5 12.2 13.2Z"/></svg>${p.fire?"On Fire":"Not on fire"}</button>
-        <span class="note">Crew ${c.st.cr} · Armour ${c.st.ar} · Weight ${c.st.wt}</span></div>
+</div>
       ${p.fire?`<p class="note">On Fire: 1 damage at the start of each activation, then roll a die. Beat your hazard count (${p.hz}) to put it out.</p>`:""}
 
-      <div class="dash-sec"><span class="lbl">${hasRB()?"Loadout · tap for the rules":"Loadout"}</span>${i===0?`<div class="chip-key" aria-label="Colour key"><span><i class="sw a"></i>Driver</span><span><i class="sw w"></i>Weapon</span><span><i class="sw u"></i>Upgrade</span><span><i class="sw p"></i>Vehicle, perk, rule</span><span><i class="sw s"></i>Sponsor</span></div>`:""}<div class="chips">
+      <div class="dash-sec"><span class="lbl">${hasRB()?"Loadout · tap for the rules":"Loadout"}</span>${i===0?`<div class="chip-key" aria-label="Colour key"><span><i class="sw a"></i>Driver</span><span><i class="sw w"></i>Weapon</span><span><i class="sw u"></i>Upgrade</span><span><i class="sw p"></i>Vehicle, perk</span></div>`:""}<div class="chips">
         ${chip("V:"+v.type,v.type,"")}
         ${v.arch?chip("A:"+v.arch,v.arch,"a"):""}
         ${v.weapons.filter(w=>W[w.k]).map(w=>chip("W:"+w.k,w.k,"w")).join("")}
         ${v.upgrades.filter(u=>U[u.k]).map(u=>chip("U:"+u.k,u.k,"u")).join("")}
         ${v.perks.filter(x=>PERK_BY_ID[x]).map(x=>chip("P:"+x,PERK_BY_ID[x].n,"")).join("")}
-        ${sp?chip("S:"+sp[0],sp[2]+" ("+sp[0]+")","s"):""}
-        ${c.rules.map(r=>chip("R:"+r,r,"")).join("")}
       </div>${hasRB()?"":`<p class="note">Own the rulebook? Load your PDFs on the home page to tap any of these for its rules.</p>`}</div>
     </article>`;
   }).join("");
