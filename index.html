@@ -184,20 +184,83 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .gl b{font-family:var(--cond);letter-spacing:.03em;white-space:nowrap}
 .foot{margin-top:28px;color:var(--muted);font-size:12.5px;max-width:70ch}
 @media (max-width:700px){.board{position:static}}
+.home-link{all:unset;cursor:pointer;font:inherit;letter-spacing:inherit}
+.home-link:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.nav .btn[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.big{min-height:52px;padding:12px 20px;font-size:17px}
+/* home */
+.home{display:flex;flex-direction:column;gap:16px;max-width:760px;margin-top:8px}
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 20px;display:flex;flex-direction:column;gap:12px}
+.eyebrow{margin:0;font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.hero-h{font-family:var(--display);font-weight:400;font-size:clamp(26px,5.5vw,40px);line-height:1.05}
+.hero-p{margin:0;max-width:62ch;color:var(--muted)}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.confirm{background:var(--warn-soft);border-radius:10px;padding:10px 12px}
+.confirm p{margin:0 0 8px}
+.resume-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+.how{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;color:var(--muted)}
+.how b{color:var(--ink);margin-right:6px}
+/* wizard */
+.wiz{max-width:900px;margin-top:8px;display:flex;flex-direction:column;gap:14px}
+.wiz-head{display:flex;flex-direction:column;gap:8px}
+.wiz-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.wiz-title{font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.wiz-q{font-family:var(--display);font-weight:400;font-size:clamp(22px,4.5vw,32px);line-height:1.1}
+.wiz-body{display:flex;flex-direction:column;gap:12px}
+.wiz-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.wiz-fields input[type=text],.wiz-fields select{width:100%}
+.wiz-stat{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--cond);font-size:16px;font-variant-numeric:tabular-nums}
+.wiz-stat b{font-size:20px}
+.wiz-stat .neg{color:var(--bad)}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:8px}
+.choice{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;position:relative}
+.choice:hover{border-color:var(--ink)}
+.choice:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.choice.sel{border-color:var(--accent);background:var(--accent-soft)}
+.choice:disabled{opacity:.45;cursor:not-allowed}
+.ch-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ch-top b{font-size:16px}
+.ch-cost{font-family:var(--cond);font-weight:700;white-space:nowrap;color:var(--muted)}
+.ch-stats{font-family:var(--cond);font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ch-rules{font-size:13px;color:var(--muted);line-height:1.35}
+.ch-badge{align-self:flex-start;font-family:var(--cond);font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:1px 6px}
+.addgroup{display:flex;flex-direction:column;gap:6px}
+.addrow{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.addrow:hover{border-color:var(--ink)}
+.addrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.addrow:disabled{opacity:.45;cursor:not-allowed}
+.addrow small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+.ar-p{font-family:var(--cond);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ar-why{grid-column:1 / -1;font-size:12.5px;color:var(--bad)}
+.ar-why.warn{color:var(--warn)}
+.wiz-nav{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:4}
+.wiz-count{font-family:var(--cond);color:var(--muted);font-variant-numeric:tabular-nums}
+.rev-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.rev-car{display:flex;flex-direction:column;gap:6px}
+.rev-h{display:flex;justify-content:space-between;gap:8px;font-size:17px}
+.rev-h span{font-family:var(--cond);font-weight:700}
+.rev-total{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--cond);font-size:18px}
+.rev-total b{font-size:26px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="mast">
-    <h1>GASLANDS <span>TEAM BUILDER</span></h1>
-    <p class="tag">Third edition playtest rules (Vehicles 5.3, Drivers 5.2, Sponsors 5.2). Pick a car, bolt on guns, hire a driver, chase a sponsor.</p>
+    <h1><button class="home-link" data-act="gohome" aria-label="Home">GASLANDS <span>TEAM BUILDER</span></button></h1>
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
   </header>
-  <div class="board" id="board"></div>
-  <main>
-    <section class="cars" id="cars" aria-label="Vehicles"></section>
-    <aside id="aside"></aside>
-  </main>
+  <div id="home" hidden></div>
+  <div id="wiz" hidden></div>
+  <div id="builder" hidden>
+    <div class="board" id="board"></div>
+    <main>
+      <section class="cars" id="cars" aria-label="Vehicles"></section>
+      <aside id="aside"></aside>
+    </main>
+  </div>
   <p class="foot">Unofficial fan tool. Rule summaries are short paraphrases for quick reference; the PDF chapters are the source of truth. Gaslands is © Mike Hutchinson / Planet Smasher Games.</p>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -504,7 +567,11 @@ function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){}
 function encodeTeam(t){ const s=JSON.stringify(t); return btoa(unescape(encodeURIComponent(s))); }
 function decodeTeam(code){ const s=decodeURIComponent(escape(atob(code.trim()))); const t=JSON.parse(s); if(!t||!Array.isArray(t.cars)) throw new Error("bad"); return t; }
 function readHash(){ try{ const h=location.hash.slice(1); if(h.startsWith("t=")) return decodeTeam(decodeURIComponent(h.slice(2))); }catch(e){} return null; }
-let team = readHash() || lsGet(LS_CUR) || exampleTeam();
+const fromHash = readHash();
+let team = fromHash || lsGet(LS_CUR) || exampleTeam();
+let view = fromHash ? "builder" : "home";
+let wiz = {step:0, n:1, nTouched:false, confirm:false};
+const BUD=[25,35,40,50,60,70,80,100];
 team.cars.forEach(c=>{ c.id=c.id||nid(); c.weapons=c.weapons||[]; c.upgrades=c.upgrades||[]; c.perks=c.perks||[]; c.weapons.forEach(w=>w.id=w.id||nid()); c.upgrades.forEach(u=>u.id=u.id||nid()); });
 
 /* ============================== RULES ENGINE ============================== */
@@ -560,7 +627,7 @@ function evalTeam(t){
   // vehicle count, Mob
   let bikes=0, counted=0; cars.forEach(c=>{ if(c.v.type==="Bike"){ bikes++; if(bikes===1) return; } counted++; });
   const maxV=Math.floor(t.budget/20);
-  if(counted>maxV) issues.push([`${counted} vehicles count toward the limit; ${t.budget} cans allows ${maxV} (one per full 20 cans${bikes?", first Bike is free":""}).`]);
+  if(counted>maxV) issues.push([`Standard rules allow ${maxV} vehicle${maxV===1?"":"s"} at ${t.budget} cans (one per full 20 cans${bikes?", first Bike free":""}); this team has ${counted}. Fine if your group agrees.`,"w"]);
   // rare vehicles (first bike exempt via Mob)
   const rareSeen={}; let bikeSeen=0;
   cars.forEach(c=>{ const b=VEHICLES[c.v.type]; if(!b[8]) return; if(c.v.type==="Bike"){ bikeSeen++; if(bikeSeen===1) return; } rareSeen[c.v.type]=(rareSeen[c.v.type]||0)+1; });
@@ -668,7 +735,7 @@ function renderCar(c, i, T){
 }
 
 let confirmDel=null;
-function render(){
+function renderBuilder(){
   const T=evalTeam(team); T.sponsor=team.sponsor;
   const over=T.total>team.budget;
   const legal=T.issues.filter(x=>x[1]!=="w").length===0 && T.cars.every(c=>c.issues.filter(x=>x[1]!=="w").length===0);
@@ -711,6 +778,191 @@ function render(){
       <div class="gl">${GLOSSARY.map(g=>`<b>${esc(g[0])}</b><span>${esc(g[1])}</span>`).join("")}</div></details></section>`;
   persist();
 }
+function budgetControl(){
+  const custom=team.customBudget||!BUD.includes(team.budget);
+  return `<div class="bud-row"><select id="tbud" data-act="budget" aria-label="Cans">${BUD.map(b=>opt(b,`${b} cans`,!custom&&b===team.budget)).join("")}${opt("custom","Custom…",custom)}</select>${custom?`<input type="number" id="tbudc" data-act="budgetc" min="1" max="999" step="1" inputmode="numeric" value="${team.budget}" aria-label="Custom cans">`:""}</div>`;
+}
+function stdCars(b){ return Math.max(1,Math.floor(b/20)); }
+function issuesHtml(list){ return list.length?`<div class="issues">${list.map(x=>`<div class="issue ${x[1]==="w"?"w":""}">${esc(x[0])}</div>`).join("")}</div>`:""; }
+function isLegal(T){ return T.issues.filter(x=>x[1]!=="w").length===0 && T.cars.every(c=>c.issues.filter(x=>x[1]!=="w").length===0); }
+
+function weaponItemsHtml(v){
+  return v.weapons.map(w=>{ const d=W[w.k]; if(!d) return ""; const turret=v.upgrades.find(u=>U[u.k]&&U[u.k].turret&&u.target===w.id); const needsFacing=!d.tags.includes("360")&&d.cat!=="Dropped"&&!turret;
+    const face= needsFacing?`<select data-act="wface" data-car="${v.id}" data-item="${w.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(w.f||"Front")===f)).join("")}</select>`
+      : `<span class="note">${d.cat==="Dropped"?"Rear":turret?"360° turret":"360°"}</span>`;
+    return `<div class="item"><div class="nm">${esc(d.n)}<small>${esc(d.range)} · ${esc(d.dice)}${d.tags.length?" · "+esc(tagLine(d)):""}${d.note?" — "+esc(d.note):""}</small></div><span class="pr">${d.cost} c · ${d.slots} sl</span><button class="x" data-act="wdel" data-car="${v.id}" data-item="${w.id}" aria-label="Remove ${esc(d.n)}">×</button><div class="ctl">${face}</div></div>`; }).join("");
+}
+function upgradeItemsHtml(v){
+  return v.upgrades.map(u=>{ const d=U[u.k]; if(!d) return "";
+    let ctl="";
+    if(d.facing) ctl=`<select data-act="uface" data-car="${v.id}" data-item="${u.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(u.f||"Front")===f)).join("")}</select>`;
+    if(d.turret){ const fw=v.weapons.filter(w=>W[w.k]&&W[w.k].cat!=="Dropped"&&!W[w.k].tags.includes("360")); ctl=`<select data-act="utarget" data-car="${v.id}" data-item="${u.id}" aria-label="Turret weapon"><option value="">Mount which weapon?</option>${fw.map(w=>opt(w.id,`${w.k} (+${W[w.k].cost} c)`,u.target===w.id)).join("")}</select>`; }
+    const tw=d.turret?v.weapons.find(w=>w.id===u.target):null;
+    const price=d.turret?(2+(tw?W[tw.k].cost:0)):d.cost;
+    const sl=d.trailer?`+${d.trailer}`:(d.turret&&v.type==="Tank"?0:d.slots);
+    return `<div class="item"><div class="nm">${esc(d.n)}<small>${d.tags.length?esc(tagLine(d))+" — ":""}${esc(d.note)}</small></div><span class="pr">${price} c · ${sl} sl</span><button class="x" data-act="udel" data-car="${v.id}" data-item="${u.id}" aria-label="Remove ${esc(d.n)}">×</button>${ctl?`<div class="ctl">${ctl}</div>`:""}</div>`; }).join("");
+}
+function perkListHtml(v,c){
+  const unlocked=[...c.unlocked];
+  if(!unlocked.length) return `<p class="note">No perk class unlocked. Pick an archetype for this driver to unlock one, or skip perks.</p>`;
+  return `<div class="perks">`+unlocked.map(cls=>`<div class="perk-class">${esc(cls)} <span class="note">· ${esc(PERKS[cls][0])}</span></div>`+PERKS[cls][1].map((p,pi)=>{ const id=cls+"#"+pi, on=v.perks.includes(id); return `<label class="perk ${on?"on":""}"><input type="checkbox" data-act="perk" data-car="${v.id}" data-perk="${id}" ${on?"checked":""}><span class="pn">${esc(p[0])}<small>${esc(p[2])}</small></span><span class="pc">${p[1]} c</span></label>`; }).join("")).join("")+`</div>`;
+}
+function sponsorListHtml(T){
+  return `<label class="sponsor"><input type="radio" name="sp" data-act="sponsor" value="" ${team.sponsor?"":"checked"}><span class="sn">No sponsor</span></label>`+
+    SPONSORS.map(s=>{ const ok=T.elig[s[0]]; return `<label class="sponsor ${ok?"":"dim"}"><input type="radio" name="sp" data-act="sponsor" value="${esc(s[0])}" ${team.sponsor===s[0]?"checked":""}><span class="sn">${esc(s[0])} <span class="status-pill ${ok?"ok":"meh"}">${ok?"Qualifies":"Not yet"}</span></span><span class="sr">${esc(s[1])}</span><span class="sp"><b>${esc(s[2])}:</b> ${esc(s[3])}</span></label>`; }).join("");
+}
+
+/* ---------- home ---------- */
+function renderHome(){
+  const saves=lsGet(LS_SAVES)||[]; const T=evalTeam(team); const has=team.cars.length>0;
+  return `<section class="home">
+    <div class="hero">
+      <p class="eyebrow">Gaslands · third edition playtest</p>
+      <h2 class="hero-h">Build a team, one step at a time.</h2>
+      <p class="hero-p">Pick your cans and how many cars, then go car by car: vehicle, driver, weapons, upgrades, perks. Costs, build slots and the once-per-team rules are checked as you go.</p>
+      <div class="hero-actions">
+        <button class="btn primary big" data-act="startwiz">Start a new build</button>
+        <button class="btn big" data-act="gobuilder">${has?"Open the full builder":"Open an empty builder"}</button>
+      </div>
+      ${wiz.confirm?`<div class="confirm" role="alert"><p>Starting over replaces <b>${esc(team.name)}</b>. Save it first?</p><div class="tools"><button class="btn small primary" data-act="startwizsave">Save it, then start</button><button class="btn small" data-act="startwizok">Start without saving</button><button class="btn small ghost" data-act="startwizno">Cancel</button></div></div>`:""}
+    </div>
+    ${has?`<div class="panel"><span class="lbl">On screen now</span><div class="resume-row"><div><b>${esc(team.name)}</b><div class="note">${team.cars.length} vehicle${team.cars.length===1?"":"s"} · ${T.total} / ${team.budget} cans${team.example?" · example team":""}</div></div><button class="btn small" data-act="gobuilder">Continue</button></div></div>`:""}
+    ${saves.length?`<div class="panel"><span class="lbl">Saved on this device</span><div class="save-list" style="margin-top:6px">${saves.map((s,i)=>`<div class="save-row"><span title="${esc(s.name)}">${esc(s.name)} · ${s.total} c</span><button class="btn small" data-act="sload" data-i="${i}">Open</button></div>`).join("")}</div></div>`:""}
+    <ol class="how">
+      <li><b>Team</b>Cans and number of cars.</li>
+      <li><b>Each car</b>Vehicle, driver, weapons, upgrades, perks.</li>
+      <li><b>Sponsor</b>See which sponsors you qualify for.</li>
+      <li><b>Review</b>Fix anything flagged, then save it or copy the link.</li>
+    </ol>
+  </section>`;
+}
+
+/* ---------- guided build ---------- */
+function wizSteps(){
+  const s=[{k:"setup",t:"Team setup"}];
+  for(let i=0;i<wiz.n;i++){ const c=`Car ${i+1}`; s.push({k:"veh",i,t:`${c} · Vehicle`},{k:"drv",i,t:`${c} · Driver`},{k:"wpn",i,t:`${c} · Weapons`},{k:"upg",i,t:`${c} · Upgrades`},{k:"prk",i,t:`${c} · Perks`}); }
+  s.push({k:"sponsor",t:"Sponsor"},{k:"review",t:"Review"});
+  return s;
+}
+function addRows(v,c,isW){
+  const spark=team.cars.some(o=>o.arch==="Spark"); const elecOK=v.type==="Van"||spark;
+  const slotsLeft=c.st.sl-c.slotsUsed; const airborne=c.rules.includes("Airborne");
+  const groups= isW? [["Common","Common weapons"],["Hand","Hand weapons · carried by the crew, 360°, no slots"],["Dropped","Dropped weapons · out the back, no slots"],["Rare","Rare weapons · one per team"]]
+                   : [["Common","Common upgrades · once per car"],["Rare","Rare upgrades · one per team"]];
+  const pool= isW? Object.values(W): Object.values(U);
+  return groups.map(([cat,label])=>`<div class="addgroup"><span class="lbl">${esc(label)}</span>${pool.filter(d=>d.cat===cat).map(d=>{
+      let why="";
+      if(isW){
+        if(d.cat==="Rare" && team.cars.some(o=>o.weapons.some(w=>w.k===d.n))) why="Already on your team";
+        else if(d.cat==="Dropped" && v.weapons.some(w=>w.k===d.n)) why="Already on this car";
+      } else {
+        if(d.cat==="Common" && v.upgrades.some(u=>u.k===d.n)) why="Already on this car";
+        else if(d.cat==="Rare" && team.cars.some(o=>o.upgrades.some(u=>u.k===d.n))) why="Already on your team";
+        else if(d.trailer && airborne) why="Airborne vehicles can't tow";
+        else if(d.trailer && v.upgrades.some(u=>U[u.k]&&U[u.k].trailer)) why="One trailer per car";
+        else if(d.trailer && c.st.wt<d.weightMin) why=`Needs Weight ${d.weightMin}+`;
+      }
+      if(!why && (d.tags||[]).includes("Electrical") && !elecOK) why="Needs a Spark driver on the team, or a Van";
+      const need=isW?d.slots:(d.turret&&v.type==="Tank"?0:d.slots);
+      const warn=!why && !d.trailer && need>slotsLeft ? `Needs ${need} slot${need===1?"":"s"}, ${Math.max(0,slotsLeft)} left` : "";
+      const cost=d.turret?"2+X":d.cost;
+      const slotTxt=d.trailer?`+${d.trailer} sl`:`${need} sl`;
+      const detail= isW? `${d.range} · ${d.dice}${d.tags.length?" · "+tagLine(d):""}${d.note?" — "+d.note:""}` : `${d.tags.length?tagLine(d)+" — ":""}${d.note}`;
+      return `<button class="addrow" data-act="${isW?"wizaddw":"wizaddu"}" data-car="${v.id}" data-k="${esc(d.n)}" ${why?"disabled":""}><span><b>${esc(d.n)}</b><small>${esc(detail)}</small></span><span class="ar-p">${cost} c · ${slotTxt}</span>${why?`<span class="ar-why">${esc(why)}</span>`:warn?`<span class="ar-why warn">${esc(warn)}</span>`:""}</button>`;
+    }).join("")}</div>`).join("");
+}
+function renderWizard(){
+  const steps=wizSteps(); if(wiz.step>=steps.length) wiz.step=steps.length-1; if(wiz.step<0) wiz.step=0;
+  const st=steps[wiz.step];
+  const T=evalTeam(team); const left=team.budget-T.total;
+  const v= st.i!=null? team.cars[st.i]:null; const c= v? T.cars[st.i]:null;
+  let body="", canNext=true;
+  if(st.k==="setup"){
+    const std=stdCars(team.budget);
+    body=`<h2 class="wiz-q">How big is the game?</h2>
+      <div class="wiz-fields">
+        <div class="field"><label for="wname">Team name</label><input type="text" id="wname" data-act="tname" value="${esc(team.name)}"></div>
+        <div class="field"><label for="tbud">Cans (points)</label>${budgetControl()}</div>
+        <div class="field"><label for="wizn">Number of cars</label><select id="wizn" data-act="wizn">${[1,2,3,4,5,6,7,8].map(n=>opt(n,`${n} car${n>1?"s":""}${n===std?" (standard)":""}`,n===wiz.n)).join("")}</select></div>
+      </div>
+      <p class="note">Standard rules allow one car per full 20 cans, so <b>${team.budget} cans = ${std} car${std>1?"s":""}</b>, plus one free Bike. Pick more if your group agrees; the review will just flag it.</p>`;
+  } else if(st.k==="veh"){
+    canNext=!!v; const others=team.cars.filter((o,j)=>j!==st.i);
+    body=`<h2 class="wiz-q">Car ${st.i+1}: pick a vehicle</h2>
+      <p class="note">Rare types are one per team (two Bikes are fine: the first one is free).</p>
+      <div class="choices">${Object.keys(VEHICLES).map(k=>{ const b=VEHICLES[k]; const n=others.filter(o=>o.type===k).length; const taken=b[8]&&(k==="Bike"?n>=2:n>=1); const sel=!!v&&v.type===k;
+        return `<button class="choice ${sel?"sel":""}" data-act="wizveh" data-i="${st.i}" data-type="${esc(k)}" ${taken?"disabled":""} aria-pressed="${sel}"><span class="ch-top"><b>${esc(k)}</b><span class="ch-cost">${b[7]} cans</span></span><span class="ch-stats">Gear ${b[0]} · Handling ${b[1]} · Crew ${b[2]} · Weight ${b[3]} · Armour ${b[4]} · Hull ${b[5]} · Slots ${b[6]}</span>${b[9].length?`<span class="ch-rules">${b[9].map(esc).join(" · ")}</span>`:""}${b[8]?`<span class="ch-badge">${taken?"Already on team":"Rare"}</span>`:""}</button>`; }).join("")}</div>`;
+  } else if(st.k==="drv"){
+    const others=team.cars.filter((o,j)=>j!==st.i);
+    const list=[["","No archetype","No special ability, no perks."],...Object.keys(ARCH).map(a=>[a,a,ARCH[a][1]])];
+    body=`<h2 class="wiz-q">Car ${st.i+1}: who's driving the ${esc(v.type)}?</h2>
+      <p class="note">An archetype gives a special ability and unlocks a perk class. Naming the driver unlocks a second class of your choice. Each archetype once per team.</p>
+      <div class="choices">${list.map(([key,label,sum])=>{ const taken=!!key&&others.some(o=>o.arch===key); const sel=(v.arch||"")===key;
+        return `<button class="choice ${sel?"sel":""}" data-act="wizarch" data-car="${v.id}" data-arch="${esc(key)}" ${taken?"disabled":""} aria-pressed="${sel}"><span class="ch-top"><b>${esc(label)}</b>${key?`<span class="ch-cost">${esc(ARCH[key][0])}</span>`:""}</span><span class="ch-rules">${esc(sum)}</span>${taken?`<span class="ch-badge">Taken</span>`:""}</button>`; }).join("")}</div>
+      <div class="wiz-fields">
+        <div class="field"><label for="n-${v.id}">Driver name (optional, unlocks a 2nd perk class)</label><input type="text" id="n-${v.id}" data-act="driver" data-car="${v.id}" value="${esc(v.driver||"")}" placeholder="Unnamed"></div>
+        ${v.named?`<div class="field"><label for="s-${v.id}">Second perk class</label><select id="s-${v.id}" data-act="second" data-car="${v.id}"><option value="">Pick one…</option>${PERK_CLASSES.filter(p=>!(v.arch&&ARCH[v.arch][0]===p)).map(p=>opt(p,p,p===v.second)).join("")}</select></div>`:""}
+      </div>`;
+  } else if(st.k==="wpn"||st.k==="upg"){
+    const isW=st.k==="wpn"; const slotsLeft=c.st.sl-c.slotsUsed;
+    body=`<h2 class="wiz-q">Car ${st.i+1}: ${isW?"arm the":"upgrade the"} ${esc(v.type)}</h2>
+      <div class="wiz-stat"><span class="${slotsLeft<0?"neg":""}"><b>${slotsLeft}</b> of ${c.st.sl} build slots left</span><span class="${left<0?"neg":""}"><b>${left}</b> cans left</span></div>
+      ${(isW?v.weapons:v.upgrades).length?`<div class="items">${isW?weaponItemsHtml(v):upgradeItemsHtml(v)}</div>`:`<p class="note">Nothing fitted yet. Tap below to add; tap again to add another. Skip if you want none.</p>`}
+      ${issuesHtml(c.issues)}
+      ${addRows(v,c,isW)}`;
+  } else if(st.k==="prk"){
+    const pc=v.perks.reduce((a,p)=>a+(PERK_BY_ID[p]?PERK_BY_ID[p].cost:0),0);
+    body=`<h2 class="wiz-q">Car ${st.i+1}: perks for ${v.driver?esc(v.driver):"the driver"}</h2>
+      <div class="wiz-stat"><span>${v.perks.length} picked · <b>${pc}</b> cans</span><span class="${left<0?"neg":""}"><b>${left}</b> cans left</span></div>
+      ${perkListHtml(v,c)}`;
+  } else if(st.k==="sponsor"){
+    body=`<h2 class="wiz-q">Chase a sponsor?</h2><p class="note">Optional. A sponsor gives every car its perk while the team meets the requirement.</p><div class="panel">${sponsorListHtml(T)}</div>`;
+  } else {
+    const legal=isLegal(T), over=T.total>team.budget;
+    const stepOf=i=>steps.findIndex(x=>x.k==="veh"&&x.i===i);
+    body=`<h2 class="wiz-q">${esc(team.name)}</h2>
+      <div class="rev-total"><span><b>${T.total}</b> / ${team.budget} cans</span><span>${team.cars.length} car${team.cars.length===1?"":"s"}</span><span class="status-pill ${legal&&!over?"ok":"no"}">${legal&&!over?"Legal":"Not legal yet"}</span>${team.sponsor?`<span class="note">Sponsor: <b>${esc(team.sponsor)}</b></span>`:""}</div>
+      ${issuesHtml(T.issues)}
+      <div class="rev-cars">${T.cars.map((c,i)=>{ const x=c.v; const names=a=>a.length?a.map(esc).join(", "):"none";
+        return `<div class="panel rev-car"><div class="rev-h"><b>${i+1}. ${esc(x.type)}</b><span>${c.cost} cans</span></div>
+          <div class="note"><b>Driver:</b> ${x.arch?esc(x.arch):"no archetype"}${x.driver?` · ${esc(x.driver)}`:""}</div>
+          <div class="note"><b>Weapons:</b> ${names(x.weapons.map(w=>w.k+(w.f?` (${w.f})`:"")))}</div>
+          <div class="note"><b>Upgrades:</b> ${names(x.upgrades.map(u=>u.k+(u.f?` (${u.f})`:"")))}</div>
+          <div class="note"><b>Perks:</b> ${names(x.perks.map(p=>PERK_BY_ID[p]?PERK_BY_ID[p].n:"").filter(Boolean))}</div>
+          <div class="note"><b>Slots:</b> ${c.slotsUsed} / ${c.st.sl} · Gear ${c.st.mg} · Hand ${c.st.hd} · Crew ${c.st.cr} · Wt ${c.st.wt} · Arm ${c.st.ar} · Hull ${c.st.hl}</div>
+          ${issuesHtml(c.issues)}
+          <div><button class="btn small" data-act="wizjump" data-step="${stepOf(i)}">Edit car ${i+1}</button></div></div>`; }).join("")}</div>
+      <div class="tools"><button class="btn primary" data-act="gobuilder">Open in the full builder</button><button class="btn" data-act="save">Save team</button><button class="btn" data-act="copylink">Copy link</button></div>`;
+  }
+  const pct=Math.round(wiz.step/(steps.length-1)*100);
+  return `<section class="wiz">
+    <div class="wiz-head">
+      <div class="wiz-top"><span class="wiz-title">${esc(st.t)}</span><span class="status-pill ${left<0?"no":"ok"}">${left<0?`${-left} cans over`:`${left} cans left`}</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+    </div>
+    <div class="wiz-body">${body}</div>
+    <div class="wiz-nav">
+      <button class="btn" data-act="wizback" ${wiz.step===0?"disabled":""}>Back</button>
+      <span class="wiz-count">Step ${wiz.step+1} of ${steps.length}</span>
+      ${st.k==="review"?`<button class="btn primary" data-act="gobuilder">Finish</button>`:`<button class="btn primary" data-act="wiznext" ${canNext?"":"disabled"}>${canNext?"Next":"Pick a vehicle"}</button>`}
+    </div>
+  </section>`;
+}
+
+function render(){
+  $("#home").hidden=view!=="home"; $("#wiz").hidden=view!=="wiz"; $("#builder").hidden=view!=="builder";
+  $("#home").innerHTML= view==="home"? renderHome():"";
+  $("#wiz").innerHTML= view==="wiz"? renderWizard():"";
+  if(view==="builder") renderBuilder(); else { $("#board").innerHTML=""; $("#cars").innerHTML=""; $("#aside").innerHTML=""; }
+  $("#nav").innerHTML=`<button class="btn small" data-act="gohome" ${view==="home"?'aria-current="page"':""}>Home</button><button class="btn small" data-act="startwiz" ${view==="wiz"?'aria-current="page"':""}>Guided build</button><button class="btn small" data-act="gobuilder" ${view==="builder"?'aria-current="page"':""}>Builder</button>`;
+  persist();
+}
+function toTop(){ try{ window.scrollTo(0,0); }catch(e){} }
+function beginWizard(){
+  const b=team.example?50:team.budget, cb=team.example?false:!!team.customBudget;
+  team=blankTeam(); team.budget=b; team.customBudget=cb;
+  wiz={step:0,n:stdCars(b),nTouched:false,confirm:false}; view="wiz"; toTop();
+}
 function stripTeam(t){ return {name:t.name,budget:t.budget,customBudget:!!t.customBudget,sponsor:t.sponsor,cars:t.cars.map(c=>({type:c.type,arch:c.arch,named:c.named,driver:c.driver,second:c.second,perks:c.perks,weapons:c.weapons.map(w=>({k:w.k,f:w.f,id:w.id})),upgrades:c.upgrades.map(u=>({k:u.k,f:u.f,target:u.target,id:u.id}))}))}; }
 function persist(){ lsSet(LS_CUR,team); try{ history.replaceState(null,"","#t="+encodeURIComponent(encodeTeam(stripTeam(team)))); }catch(e){} }
 let toastT; function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,1800); }
@@ -726,8 +978,9 @@ function touch(){ team.example=false; }
 document.addEventListener("change",e=>{
   const el=e.target, a=el.dataset.act; if(!a) return; const v=el.dataset.car?carById(el.dataset.car):null;
   switch(a){
-    case "budget": if(el.value==="custom"){ team.customBudget=true; } else { team.budget=+el.value; team.customBudget=false; } break;
-    case "budgetc": { const n=parseInt(el.value,10); if(n>=1&&n<=999){ team.budget=n; team.customBudget=true; } } break;
+    case "budget": if(el.value==="custom"){ team.customBudget=true; } else { team.budget=+el.value; team.customBudget=false; } if(view==="wiz"&&!wiz.nTouched) wiz.n=stdCars(team.budget); break;
+    case "budgetc": { const n=parseInt(el.value,10); if(n>=1&&n<=999){ team.budget=n; team.customBudget=true; } } if(view==="wiz"&&!wiz.nTouched) wiz.n=stdCars(team.budget); break;
+    case "wizn": wiz.n=+el.value; wiz.nTouched=true; break;
     case "type": v.type=el.value; break;
     case "arch": v.arch=el.value; if(v.second===(v.arch&&ARCH[v.arch][0])) v.second=""; pruneCar(v); break;
     case "second": v.second=el.value; pruneCar(v); break;
@@ -754,13 +1007,26 @@ document.addEventListener("click",e=>{
     case "del": team.cars=team.cars.filter(c=>c!==v); break;
     case "dup": { const c=JSON.parse(JSON.stringify(v)); c.id=nid(); c.arch=""; c.named=false; c.driver=""; c.second=""; c.perks=[]; c.weapons.forEach(w=>w.id=nid()); const map={}; v.weapons.forEach((w,i)=>map[w.id]=c.weapons[i].id); c.upgrades.forEach(u=>{u.id=nid(); if(u.target) u.target=map[u.target]||"";}); team.cars.push(c); toast("Vehicle duplicated (driver left blank)"); } break;
     case "save": { const saves=lsGet(LS_SAVES)||[]; const T=evalTeam(team); const entry={name:team.name,total:T.total,team:stripTeam(team)}; const i=saves.findIndex(s=>s.name===team.name); if(i>=0) saves[i]=entry; else saves.unshift(entry); lsSet(LS_SAVES,saves); confirmDel=null; toast("Saved to this browser"); } break;
-    case "sload": { const s=(lsGet(LS_SAVES)||[])[+el.dataset.i]; if(s){ team=hydrate(s.team); toast("Loaded "+s.name); } } break;
+    case "sload": { const s=(lsGet(LS_SAVES)||[])[+el.dataset.i]; if(s){ team=hydrate(s.team); view="builder"; toast("Loaded "+s.name); } } break;
     case "sdel": confirmDel=+el.dataset.i; render(); return;
     case "sdelno": confirmDel=null; render(); return;
     case "sdelok": { const saves=lsGet(LS_SAVES)||[]; saves.splice(+el.dataset.i,1); lsSet(LS_SAVES,saves); confirmDel=null; toast("Deleted"); } break;
     case "new": team=blankTeam(); break;
     case "example": team=exampleTeam(); break;
     case "copy": { const code=$("#code").value; const done=()=>toast("Code copied"); try{ navigator.clipboard.writeText(code).then(done,()=>{ $("#code").select(); toast("Select-all done: copy it manually"); }); }catch(err){ $("#code").select(); toast("Select-all done: copy it manually"); } } return;
+    case "gohome": view="home"; wiz.confirm=false; toTop(); render(); return;
+    case "gobuilder": view="builder"; toTop(); render(); return;
+    case "startwiz": if(team.cars.length && !team.example){ view="home"; wiz.confirm=true; toTop(); render(); return; } beginWizard(); render(); return;
+    case "startwizok": beginWizard(); render(); return;
+    case "startwizno": wiz.confirm=false; render(); return;
+    case "startwizsave": { const saves=lsGet(LS_SAVES)||[]; const T=evalTeam(team); const entry={name:team.name,total:T.total,team:stripTeam(team)}; const i=saves.findIndex(s=>s.name===team.name); if(i>=0) saves[i]=entry; else saves.unshift(entry); lsSet(LS_SAVES,saves); toast("Saved "+team.name); beginWizard(); render(); } return;
+    case "wizback": wiz.step--; toTop(); render(); return;
+    case "wiznext": { const st=wizSteps()[wiz.step]; if(st&&st.k==="setup") team.cars=team.cars.slice(0,wiz.n); wiz.step++; toTop(); render(); } return;
+    case "wizjump": wiz.step=+el.dataset.step; toTop(); render(); return;
+    case "wizveh": { const i=+el.dataset.i; if(team.cars[i]){ team.cars[i].type=el.dataset.type; } else { team.cars.push({id:nid(),type:el.dataset.type,arch:"",named:false,driver:"",second:"",perks:[],weapons:[],upgrades:[]}); } } break;
+    case "wizarch": v.arch=el.dataset.arch; if(v.arch&&v.second===ARCH[v.arch][0]) v.second=""; pruneCar(v); break;
+    case "wizaddw": { const d=W[el.dataset.k]; v.weapons.push({id:nid(),k:d.n,f:d.cat==="Dropped"||d.tags.includes("360")?undefined:"Front"}); } break;
+    case "wizaddu": { const d=U[el.dataset.k]; v.upgrades.push({id:nid(),k:d.n,f:d.facing?"Front":undefined,target:""}); } break;
     case "copylink": { const url=location.href; const done=()=>toast("Link copied"); try{ navigator.clipboard.writeText(url).then(done,()=>{ $("#code").select(); toast("Couldn't copy the link; copy the code instead"); }); }catch(err){ toast("Couldn't copy the link; copy the code instead"); } } return;
     case "import": { try{ team=hydrate(decodeTeam($("#paste").value)); toast("Team loaded"); }catch(err){ toast("That code didn't load. Check you pasted all of it."); return; } } break;
     default: return;
