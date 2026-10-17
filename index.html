@@ -280,6 +280,7 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .dash.wrecked{border-color:var(--bad)}
 .dash-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
 .dash-h b{font-family:var(--display);font-weight:400;font-size:22px}
+.drv-name{color:var(--accent);font-weight:700;font-size:15px}
 .dash-sec{display:flex;flex-direction:column;gap:6px}
 .dash-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .gears{display:flex;gap:6px;flex-wrap:wrap}
@@ -1090,7 +1091,7 @@ function renderPlay(){
     const pList=v.perks.filter(x=>PERK_BY_ID[x]).map(x=>`<div><b>${esc(PERK_BY_ID[x].n)}:</b> ${esc(PERK_BY_ID[x].note)}</div>`).join("");
     const uList=v.upgrades.filter(u=>U[u.k]).map(u=>`<div><b>${esc(U[u.k].n)}${u.f?` (${esc(u.f.toLowerCase())})`:""}:</b> ${esc(U[u.k].note)}</div>`).join("");
     return `<article class="dash ${left===0?"wrecked":""}">
-      <div class="dash-h"><b>${i+1}. ${esc(v.type)}</b><span class="note">${v.arch?esc(v.arch):"No archetype"}${v.driver?` · ${esc(v.driver)}`:""}</span>${left===0?`<span class="status-pill no">Wrecked</span>`:""}</div>
+      <div class="dash-h"><b>${i+1}. ${esc(v.type)}</b><span class="note">${v.driver?`<span class="drv-name">${esc(v.driver)}</span> · `:""}${v.arch?esc(v.arch):"No archetype"}</span>${left===0?`<span class="status-pill no">Wrecked</span>`:""}</div>
 
       <div class="dash-sec"><span class="lbl">Gear (max ${c.st.mg})</span>
         <div class="gears">${[1,2,3,4,5,6].map(g=>`<button class="gbtn ${g===p.gear?"on":""}" data-act="pgear" data-i="${i}" data-g="${g}" ${g>c.st.mg?"disabled":""} aria-pressed="${g===p.gear}" aria-label="Gear ${g}">${g}</button>`).join("")}</div></div>
