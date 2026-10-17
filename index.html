@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Unofficial team builder for Gaslands third-edition playtest rules: vehicles, weapons, upgrades, drivers, perks and sponsors with live legality checks.">
+<meta name="theme-color" content="#121416">
+<title>Gaslands Team Builder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: a garage bay. One sticky "pit board" (cans, vehicles, sponsor) over a grid of dashboard cards, one per vehicle. */
+:root{
+  --bg:#e7e9ec;        /* galvanized steel */
+  --panel:#f6f7f8;
+  --panel-2:#eceef1;
+  --ink:#1a1e23;
+  --muted:#5b6470;
+  --line:#c9ced5;
+  --accent:#d9480f;    /* traffic-cone orange */
+  --accent-ink:#ffffff;
+  --accent-soft:#fbe3d6;
+  --good:#2b8a3e; --good-soft:#dcefe0;
+  --bad:#c92a2a;  --bad-soft:#f8dcdc;
+  --warn:#b7791f; --warn-soft:#f6ead2;
+  --display:"Saira Stencil One", "Arial Black", Impact, sans-serif;
+  --body:"Barlow", "Helvetica Neue", Arial, sans-serif;
+  --cond:"Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121416; --panel:#1b1f23; --panel-2:#22272c; --ink:#e9ecef; --muted:#9aa4af; --line:#333a42;
+  --accent:#ff7a2e; --accent-ink:#16181a; --accent-soft:#3a2416;
+  --good:#51cf66; --good-soft:#1c3323; --bad:#ff6b6b; --bad-soft:#3b1d1d; --warn:#f2b84b; --warn-soft:#3a2f17;
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121416; --panel:#1b1f23; --panel-2:#22272c; --ink:#e9ecef; --muted:#9aa4af; --line:#333a42;
+  --accent:#ff7a2e; --accent-ink:#16181a; --accent-soft:#3a2416;
+  --good:#51cf66; --good-soft:#1c3323; --bad:#ff6b6b; --bad-soft:#3b1d1d; --warn:#f2b84b; --warn-soft:#3a2f17;
+  color-scheme:dark }
+*{box-sizing:border-box}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+h1,h2,h3{margin:0;text-wrap:balance}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto}
+
+/* masthead */
+.mast{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 16px;padding-block:18px 10px}
+.mast h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,6vw,44px);letter-spacing:.02em;line-height:1}
+.mast h1 span{color:var(--accent)}
+.mast .tag{color:var(--muted);font-size:13px;flex:1 1 220px}
+.chip-ex{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--warn-soft);color:var(--warn);border-radius:4px;padding:2px 7px}
+
+/* pit board */
+.board{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;border-bottom:1px solid var(--line)}
+.board-row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0}
+.field label,.lbl{font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.field input[type=text],select{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:40px;max-width:100%}
+.team-name{flex:2 1 220px}
+.team-name input{width:100%;font-weight:600}
+.budget{flex:0 0 auto}
+.bud-row{display:flex;gap:6px}
+.bud-row input{width:88px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:40px;font-weight:600;font-variant-numeric:tabular-nums}
+.gauge{flex:3 1 280px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.gauge-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:var(--cond);font-variant-numeric:tabular-nums}
+.gauge-top b{font-size:22px;font-weight:700}
+.gauge-top .sub{color:var(--muted);font-size:14px}
+.bar{height:10px;border-radius:5px;background:var(--panel-2);overflow:hidden;position:relative}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:5px;transition:width .25s}
+.bar.over i{background:var(--bad)}
+.cans-cells{display:flex;gap:2px;flex-wrap:wrap}
+.status-pill{font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.ok{background:var(--good-soft);color:var(--good)} .no{background:var(--bad-soft);color:var(--bad)} .meh{background:var(--warn-soft);color:var(--warn)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 12px;min-height:40px;font-weight:600}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ghost{background:transparent}
+.btn.small{min-height:32px;padding:4px 10px;font-size:14px}
+.btn.danger{color:var(--bad)}
+
+/* issues */
+.issues{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.issue{font-size:14px;border-radius:6px;padding:5px 10px;background:var(--bad-soft);color:var(--bad)}
+.issue.w{background:var(--warn-soft);color:var(--warn)}
+
+/* main grid */
+main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:16px;align-items:start}
+@media (max-width:960px){main{grid-template-columns:minmax(0,1fr)}}
+.cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),1fr));gap:16px}
+
+/* dashboard card */
+.car{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.car-head{display:flex;gap:10px;align-items:center;padding:12px 14px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+.car-head .num{font-family:var(--display);font-size:26px;color:var(--accent);line-height:1}
+.car-head select{flex:1 1 auto;min-width:0;font-weight:700}
+.car-head .cost{font-family:var(--cond);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.car-head .cost small{font-size:12px;color:var(--muted);font-weight:600;margin-left:2px}
+.car-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:14px}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stat{text-align:center;padding:6px 2px;border-right:1px solid var(--line);background:var(--panel)}
+.stat:last-child{border-right:0}
+.stat .k{font-family:var(--cond);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--cond);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat .v.up{color:var(--good)} .stat .v.down{color:var(--bad)}
+.gear-track{display:flex;gap:3px;justify-content:center;margin-top:3px}
+.gear-track span{width:7px;height:7px;border-radius:2px;background:var(--line)}
+.gear-track span.on{background:var(--accent)}
+.hull{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.hull span{width:13px;height:13px;border:1.5px solid var(--muted);border-radius:3px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px}
+.slots{display:flex;gap:3px;align-items:center}
+.slots span{width:16px;height:10px;border-radius:2px;border:1.5px solid var(--muted)}
+.slots span.used{background:var(--ink);border-color:var(--ink)}
+.slots span.over{background:var(--bad);border-color:var(--bad)}
+.rules{display:flex;flex-wrap:wrap;gap:6px}
+.rule{font-family:var(--cond);font-weight:600;font-size:13px;letter-spacing:.03em;border:1px solid var(--line);border-radius:999px;padding:2px 9px;background:var(--panel);cursor:help}
+.rule.sp{border-color:var(--accent);color:var(--accent)}
+.sec{display:flex;flex-direction:column;gap:8px}
+.sec-h{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.sec-h h3{font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase}
+.sec-h .meta{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.driver-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:520px){.driver-grid{grid-template-columns:1fr}}
+.driver-grid select,.driver-grid input{width:100%}
+.note{font-size:13.5px;color:var(--muted)}
+.note b{color:var(--ink);font-weight:600}
+.items{display:flex;flex-direction:column;gap:6px}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 8px;align-items:center;background:var(--panel-2);border-radius:8px;padding:7px 8px 7px 10px}
+.item .nm{font-weight:600;min-width:0}
+.item .nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;line-height:1.35}
+.item .pr{font-family:var(--cond);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:15px}
+.item select{min-height:32px;padding:3px 6px;font-size:13px}
+.item .x{border:0;background:transparent;color:var(--muted);font-size:20px;line-height:1;padding:2px 6px;border-radius:6px}
+.item .x:hover{color:var(--bad);background:var(--bad-soft)}
+.item .ctl{display:flex;gap:6px;align-items:center;grid-column:1 / -1}
+.item.bad{outline:1.5px solid var(--bad)}
+.adder{display:flex;gap:6px}
+.adder select{flex:1 1 auto;min-width:0}
+.perks{display:flex;flex-direction:column;gap:5px}
+.perk{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:start;padding:6px 8px;border-radius:8px;border:1px solid transparent}
+.perk:hover{background:var(--panel-2)}
+.perk.on{background:var(--accent-soft);border-color:var(--accent)}
+.perk input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent)}
+.perk .pn{font-weight:600}
+.perk .pn small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;line-height:1.35}
+.perk .pc{font-family:var(--cond);font-weight:700;white-space:nowrap}
+.perk-class{font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:4px}
+.car-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:10px}
+.car .issues{margin-top:0}
+.add-car{border:2px dashed var(--line);border-radius:14px;background:transparent;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;color:var(--muted)}
+.add-car select{min-width:220px;max-width:100%}
+
+/* side panel */
+aside{display:flex;flex-direction:column;gap:16px;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.panel h2{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.02em;margin-bottom:8px}
+.sponsor{border-top:1px solid var(--line);padding-block:8px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start}
+.sponsor:first-of-type{border-top:0}
+.sponsor input{margin-top:4px;accent-color:var(--accent);width:17px;height:17px}
+.sponsor .sn{font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sponsor .sr{font-size:13px;color:var(--muted);grid-column:2}
+.sponsor .sp{font-size:13px;grid-column:2}
+.sponsor .sp b{color:var(--accent)}
+.sponsor.dim .sn{color:var(--muted)}
+.save-list{display:flex;flex-direction:column;gap:6px}
+.save-row{display:flex;gap:6px;align-items:center;justify-content:space-between;background:var(--panel-2);border-radius:8px;padding:6px 8px}
+.save-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+textarea{width:100%;min-height:70px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px;font-family:ui-monospace,Menlo,monospace;font-size:12px;resize:vertical;color:var(--ink)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-weight:600;z-index:20}
+details.glossary summary{cursor:pointer;font-weight:700}
+.gl{font-size:13.5px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;margin-top:8px}
+.gl b{font-family:var(--cond);letter-spacing:.03em;white-space:nowrap}
+.foot{margin-top:28px;color:var(--muted);font-size:12.5px;max-width:70ch}
+@media (max-width:700px){.board{position:static}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <h1>GASLANDS <span>TEAM BUILDER</span></h1>
+    <p class="tag">Third edition playtest rules (Vehicles 5.3, Drivers 5.2, Sponsors 5.2). Pick a car, bolt on guns, hire a driver, chase a sponsor.</p>
+  </header>
+  <div class="board" id="board"></div>
+  <main>
+    <section class="cars" id="cars" aria-label="Vehicles"></section>
+    <aside id="aside"></aside>
+  </main>
+  <p class="foot">Unofficial fan tool. Rule summaries are short paraphrases for quick reference; the PDF chapters are the source of truth. Gaslands is © Mike Hutchinson / Planet Smasher Games.</p>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ============================== DATA ==============================
+   Stats, costs and slots are copied as numbers from the playtest PDFs.
+   Every rule text below is a short paraphrase, not the book's wording. */
+
+const VEHICLES = {
+  // name: [maxGear, handling, crew, weight, armour, hull, slots, cost, rare, rules[]]
+  "Buggy":         [4,5,2,1,0,8,2,13,false,["Roll Cage"]],
+  "Hot Rod":       [6,3,1,1,0,8,2,12,false,["Redline"]],
+  "Monster Truck": [5,4,2,4,1,12,2,20,false,["All Terrain","Up And Over"]],
+  "Muscle Car":    [6,3,2,3,1,12,3,18,false,["Redline"]],
+  "Passenger Car": [4,4,2,2,1,12,3,15,false,[]],
+  "Pickup":        [4,3,3,3,1,14,4,16,false,[]],
+  "Sports Car":    [6,5,1,2,0,10,2,20,false,["Downforce"]],
+  "Van":           [3,3,4,4,1,14,3,18,false,["Utility Vehicle"]],
+  "Bike":          [6,5,1,1,0,6,1,12,true,["Redline","Mob"]],
+  "Heavy Truck":   [3,3,4,5,2,16,6,28,true,["Sluggish"]],
+  "Bus":           [3,3,8,5,2,16,3,30,true,["Sluggish"]],
+  "Gyrocopter":    [4,4,1,1,0,4,2,15,true,["Airborne"]],
+  "Helicopter":    [4,4,3,3,1,8,4,30,true,["Airborne"]],
+  "Tank":          [3,3,3,6,5,16,5,36,true,["All Terrain","Hefty","Turret","Up And Over"]],
+  "War Rig":       [3,3,6,6,4,20,8,40,true,["Articulated","Hefty","Sluggish"]],
+};
+const VEHICLE_RULES = {
+  "Roll Cage":"No Crunch damage when it wipes out.",
+  "Redline":"In a Handling Check, spend 1 Focus or 2 Fury and take a hazard to set current gear to 5.",
+  "All Terrain":"Unaffected by Treacherous surfaces.",
+  "Up And Over":"While ploughing through, take hazards to ignore that many vehicles or obstacles; also ignores Distracted for the activation.",
+  "Downforce":"Take a hazard to pick a template as if one gear lower. Repeatable.",
+  "Utility Vehicle":"Can buy Electrical weapons and upgrades. Up to 3 of its upgrades need 1 fewer build slot.",
+  "Mob":"Your first Bike doesn't count toward vehicle, team-size, deployment or rare limits.",
+  "Sluggish":"Can't choose a template that is hazardous in its current gear.",
+  "Airborne":"Flies over vehicles and terrain, can't collide or set off dropped weapons, can grab loot. Takes 2 extra damage when it wipes out.",
+  "Hefty":"Can't be shunted by a lighter vehicle.",
+  "Turret":"The Turret Mount upgrade takes no build slots.",
+  "Articulated":"Tractor and trailer move as hinged halves. No Slide or Drift. Has Tanker Anchor: spend 1 Fury, take a hazard, drop a gear.",
+};
+
+/* weapons: key -> {n, cat, range, dice, slots, cost, tags[], note} */
+const W = {};
+function addW(cat, rows){ rows.forEach(r=>{ const [n,range,dice,slots,cost,tags,note]=r; W[n]={n,cat,range,dice,slots,cost,tags:tags||[],note:note||""}; }); }
+addW("Common",[
+  ["Machine Gun","Double","3D6",1,1],
+  ["Heavy Machine Gun","Double","4D6",1,2],
+  ["Mini-Gun","Double","6D6",2,3],
+  ["Scrap Cannon","Large Burst","4D6",1,2,["Splash"]],
+  ["Rockets","Double","4D6",2,2,["Ammo 3","Blast","Rattle"]],
+  ["Mortar","Double","6D6",3,3,["Blast","Indirect"]],
+  ["Missiles","Double","8D6",3,4,["Ammo 3","Blast","Rattle"]],
+  ["Flamethrower","Large Burst","6D6",2,3,["Ammo 3","Fire","Splash"]],
+]);
+addW("Hand",[
+  ["Handgun","Medium","1D6",0,0,["360"]],
+  ["Bazooka","Medium","3D6",0,2,["360","Ammo 1","Ignores Armour 1","Blast"]],
+  ["Grenades","Medium","2D6",0,2,["360","Rattle","Indirect"]],
+  ["Magnum","Double","2D6",0,2,["360"]],
+  ["Molotov Cocktails","Medium","2D6",0,2,["360","Fire"]],
+  ["Shotgun","Long","3/2/1D6",0,2,["360"],"3 dice at Short, 2 at Medium, 1 at Long."],
+  ["Submachine Gun","Medium","3D6",0,4,["360"]],
+  ["Thunder Sticks","Short","2D6",0,3,["360","Ignores Armour 2"],"Can fire even while Distracted."],
+]);
+addW("Dropped",[
+  ["Oil Slick Dropper","Dropped","–",0,1,["Ammo 3","Large Burst"],"Leaves a Treacherous surface."],
+  ["Smoke Dropper","Dropped","–",0,1,["Ammo 3","Large Burst"],"Gives cover; anything touching it is Distracted for the activation."],
+  ["Glue Dropper","Dropped","–",0,1,["Ammo 3","Large Burst"],"Touching it drops the vehicle 3 gears (min 1)."],
+  ["Caltrop Dropper","Dropped","3D6",0,2,["Ammo 3","Small Burst","Rattle"],"Treacherous. Touching it means a 3D6 Rattle attack."],
+  ["Mine Dropper","Dropped","5D6",0,3,["Ammo 3","Small Burst","Ignores Armour 2"],"Touching it means a 5D6 attack."],
+  ["Napalm Dropper","Dropped","5D6",0,3,["Ammo 3","Small Burst","Fire"],"Treacherous. Touching it means a 5D6 Fire attack."],
+  ["RC Car Bombs","Dropped","–",0,4,["Ammo 3"],"Place a tiny explosive car within Short and drive it into enemies."],
+  ["Sentry Gun","Dropped","6D6",0,4,["Ammo 3"],"Place a turret within Short; it fires 6D6 at the nearest enemy each Clean Up."],
+]);
+addW("Rare",[
+  ["Arc Lightning Gun","Double","6D6",2,4,["Ammo 1","Electrical"],"After damaging a target, arcs to another vehicle within Short, friend or foe."],
+  ["Combat Laser","Double","3D6",2,3,["Electrical","Ignores Armour 2"]],
+  ["BFG","Double","20D6",5,5,["Ammo 1","Blast"],"Shunts what it damages. Unless Weight 6, the shooter is shunted back and takes D6 hazards."],
+  ["Grav Gun","Double","(3D6)",2,3,["Electrical","Ignores Armour 3","Tactical"],"Hits raise or lower the target's Weight instead of damaging. Weight 0 = Airborne."],
+  ["Harpoon","Double","(5D6)",2,3,["Tactical"],"Hits reel the lighter vehicle toward the heavier one."],
+  ["Kinetic Super Booster","Double","(6D6)",2,3,["Ammo 1","Electrical","Tactical"],"Hits shove the target forward: Short, Medium or Long straight."],
+  ["Sonic Cannon","Long","(2×Wt)",1,1,["Ammo 1","Electrical","Tactical","Splash","Rattle"],"Dice equal twice each target's Weight; hits give hazards, no damage."],
+  ["Tank Cannon","Double","8D6",4,5,["Ammo 3","Ignores Armour 3"],"Unless Weight 6, the shooter takes 2 hazards after firing."],
+  ["Thumper","Medium","–",2,5,["Ammo 1","Electrical","Indirect","360"],"Roll for each vehicle within Medium: beat its Weight and it wipes out."],
+  ["Wreck Lobber","Double","–",4,3,["Ammo 3"],"Launches a wrecked car at a spot you guess, or drops one behind you."],
+  ["Wrecking Ball","Short","2×Wt",3,2,["360"],"Damage equal to the target's Weight or more lets you shunt it."],
+]);
+const SHOOTING_CATS = ["Common","Hand","Rare"];
+
+/* upgrades: key -> {n, cat, slots, cost, tags[], note, facing, trailer, weightMin} */
+const U = {};
+function addU(cat, rows){ rows.forEach(r=>{ const [n,slots,cost,note,opt]=r; U[n]=Object.assign({n,cat,slots,cost,note,tags:[]},opt||{}); }); }
+addU("Common",[
+  ["Big Tyres",0,1,"Ignores Treacherous surfaces."],
+  ["Bull Bar",0,1,"Smash attacks on its facing: +1 smash die and the target takes a hazard.",{facing:true}],
+  ["Buzzblades",0,3,"Collisions on its facing: your smash attack Ignores Armour 2.",{facing:true}],
+  ["CB Radio",0,1,"Give Way without taking a hazard."],
+  ["Extra Armour",1,3,"+1 Armour.",{mod:{ar:1}}],
+  ["Extra Crewmember",0,2,"+1 Crew.",{mod:{cr:1}}],
+  ["Heavy Frame",1,1,"+1 Weight.",{mod:{wt:1}}],
+  ["Infuriating Jingle",0,2,"Enemies within Medium that can shoot it must.",{tags:["Electrical"]}],
+  ["Magnetic Jammer",0,2,"Enemies within Medium take 1 damage on a 4+ whenever they tick an Ammo box.",{tags:["Electrical"]}],
+  ["Nitro Booster",0,3,"Once per activation, take 3 hazards to link a Medium Straight, Long Straight or Long 30° to a template.",{tags:["Ammo 1"]}],
+  ["Ram",1,2,"Collisions on its facing: +2 smash dice and ignore the first hazard.",{facing:true}],
+  ["Ramshackle Hull Plating",1,1,"+2 Hull.",{mod:{hl:2}}],
+  ["Roll Cage",1,2,"No Crunch damage when it wipes out."],
+  ["Siren",0,2,"End of Attack Step: roll under a Medium-range enemy's gear and it drops a gear or takes 2 hazards."],
+  ["Spikes",0,2,"Anything that smash-attacks it takes 1 damage."],
+  ["Tank Tracks",1,3,"+1 Handling, −1 Max Gear, ignores Treacherous surfaces.",{mod:{hd:1,mg:-1}}],
+  ["Trailer (Lightweight)",0,2,"+1 build slot. Gains Articulated.",{trailer:1,weightMin:0}],
+  ["Trailer (Middleweight)",0,4,"+2 build slots. Gains Articulated and Hefty. Weight 2+ only.",{trailer:2,weightMin:2}],
+  ["Trailer (Heavyweight)",0,6,"+3 build slots. Gains Articulated, Hefty and Sluggish. Weight 4+ only.",{trailer:3,weightMin:4}],
+  ["V10 Engine",0,5,"+1 Max Gear (max 6).",{mod:{mg:1}}],
+  ["Wheel Scythes",0,1,"Its smash attacks gain Rattle."],
+]);
+addU("Rare",[
+  ["Experimental Nuclear Engine",1,5,"Once per round, take 2 damage to pick a template as if in Gear 6. Explodes big when wrecked and can't respawn.",{tags:["Electrical"]}],
+  ["Experimental Teleporter",1,3,"Start of activation: guess a straight-template distance to a coin. Right = teleport there; wrong = an opponent places you.",{tags:["Ammo 1","Electrical"]}],
+  ["Exploding Ram",0,2,"Front collision: +6 smash dice, but take 1 damage per smash die rolling 1–2.",{tags:["Ammo 1"]}],
+  ["Grabber Arm",2,1,"Once per activation, take a hazard to grab a vehicle you'd shunt and put it anywhere within Short."],
+  ["Improvised Sludge Thrower",2,1,"Place its dropped-weapon templates anywhere within Medium, any direction."],
+  ["Magnetic Clamps",0,2,"Can only be shunted by an aggressor dealing 3+ damage."],
+  ["Rubber Bumpers",0,2,"Always shunts its victim, unless the victim is 2+ Weight heavier or Hefty and heavier."],
+  ["Turret Mount",1,2,"One shooting weapon becomes 360°. Costs 2 + that weapon's cost.",{turret:true}],
+  ["Wall Of Amplifiers",3,3,"End of Movement: collect up to 1 hazard from each friend within Medium and dump them all on one vehicle within Medium."],
+]);
+
+/* archetypes: name -> [perkClass, summary, unlocksElectrical] */
+const ARCH = {
+  "Arsonist":["Pyromania","Sheds hazards around fire: 3 at activation start if burning, 2 when it sets someone alight, 1 when attacking a burning target."],
+  "Blackfinger":["Wrench","Once per activation, spend 2 Focus from its handling roll to regain 2 HP."],
+  "Brawler":["Aggression","Drops 2 hazards whenever it rolls 8+ smash dice in one smash attack."],
+  "Gremlin":["Mischief","Forces a re-roll of any Wipeout or Explosion check within Long range."],
+  "Gun Nut":["Fireworks","Once per round, take 1 damage to fire an Ammo weapon again (ignores the Crew limit)."],
+  "Hauler":["Wrench","At 2+ Hull, a single attack roll can't take it below 1 Hull."],
+  "Hunter":["Pursuit","Re-roll attack dice against vehicles that already activated this round."],
+  "Mystic":["Mischief","Keeps a Sacred Bone die and may swap it with any die rolled for this vehicle."],
+  "Professional":["Precision","Once per round, take a hazard to flip one handling die between Focus and Fury."],
+  "Psycho":["Reckless","Once per round, hands one of its hazards to a vehicle within Medium."],
+  "Raider":["Rowdy","Ignores the Distracted rule."],
+  "Road Warrior":["Badass","Drops a hazard the first time each round it damages each enemy."],
+  "Rough Rider":["Daring","After hitting an obstacle, may pivot up to 90° if it ends clear."],
+  "Spark":["Tech","Take hazards to stretch a weapon from Medium to Long or add Fire, Blast or Indirect. Unlocks Electrical gear for the whole team.",true],
+  "Speed Demon":["Speed","Starting an activation in gear 1–2: +1 hazard. In gear 6: drop 3 hazards."],
+  "Stunt Driver":["Daring","Once per Movement Step, take 2 hazards to ignore one obstacle or vehicle."],
+  "Warlord":["Military","Once per round in its Attack Step, a friend within Long may take 2 hazards to fire one weapon."],
+};
+
+/* perks: class -> [flavour, [[name,cost,summary,mod?]...]] */
+const PERKS = {
+  "Aggression":["Two-ton steel fist.",[
+    ["Battlehammer",6,"+1 smash die for every 2 hazards on itself."],
+    ["Beatdown",2,"Once per activation, regain 1 HP after hurting an enemy that is below half HP."],
+    ["Boarding Party",5,"+1 smash die per Crew it has over the target (max +3)."],
+    ["Hit & Run",3,"After dealing 3+ damage in a step, shift a gear without a hazard."],
+    ["Impetuous",2,"Take up to 3 hazards to count that much higher gear for Pole Position."],
+    ["Spiked Fist",4,"Once per collision, re-roll 1 smash die per 2 hazards."]]],
+  "Badass":["Cool as a cucumber.",[
+    ["Cheap Sunglasses",5,"+1 smash die per hazard the target has above yours (max +5)."],
+    ["Cruising",3,"When it sheds its last hazard, shift a gear for free."],
+    ["Mister Fahrenheit",2,"Takes at most 2 hazards from collisions per activation."],
+    ["Smooth Operator",3,"Spend 2 Focus or 2 Fury to drop up to 3 hazards."],
+    ["Taking Care Of Business",2,"Clears all hazards when it passes a gate or scores VP."],
+    ["White Knuckles",3,"Needs one extra Fury result to wipe out."]]],
+  "Daring":["Careful drivers need not apply.",[
+    ["Barrel Roll",1,"May choose to wipe out after a collision during its move."],
+    ["Dust Clouds",4,"Spend 2 Fury and take 2 hazards: can't be shot for the rest of the round."],
+    ["Evasive Maneuvers",5,"Once per round as a collision victim, take 3 hazards to slip away as if shunted before smash dice."],
+    ["Handbrake Artist",6,"Place drifts freely as long as it touches the far end of the template."],
+    ["Lock In",2,"+1 Handling while below half HP."],
+    ["Slippery",3,"When evading, take hazards to cancel that many Critical Hits."]]],
+  "Fireworks":["Drinks TNT, smokes dynamite.",[
+    ["Fully Loaded",4,"A weapon with 3+ ammo left turns rolls of 5 into extra crits."],
+    ["Get Off My Lawn",4,"Re-roll attack dice with Rattle or Blast weapons."],
+    ["Hidden Ammo Caches",2,"Passing a gate or scoring VP refills 1 ammo box."],
+    ["High Explosives",1,"Its Blast radius reaches Medium."],
+    ["TNT",4,"Blast triggers on every uncancelled hit, not just crits."],
+    ["Well Stocked",3,"+1 ammo box on every Ammo weapon and upgrade."]]],
+  "Military":["Highly trained, heavily armed.",[
+    ["Bullet-time",3,"After a Slide, one weapon counts as 360° for the round."],
+    ["Drive By",3,"Side and 360° weapons can shoot from the sides of this turn's movement templates."],
+    ["Easy Target",5,"Targets in gear 1–2 get −1 Armour against its shots."],
+    ["Full Bore",4,"At Short range, rolls of 5 also add a crit."],
+    ["Headshot",6,"Against a lower-gear target, each crit counts as two."],
+    ["Squaddies",4,"Once per step, take 2 hazards for +3 Crew that step."]]],
+  "Mischief":["The stick in their spokes.",[
+    ["Backstab",4,"Re-roll attack dice when your template touches the target's rear edge."],
+    ["Fix Your Brakes",3,"Once per activation, take 2 hazards to make a nearby vehicle pick a non-hazardous template."],
+    ["Jammy",5,"Each attack die that misses it: drop a hazard or deal 1 damage back (max 5 each)."],
+    ["Loose Screws",2,"Taking 2+ smash damage drops a free Oil Slick, Smoke or Caltrops."],
+    ["Secret Modifications",1,"Once per game, double an enemy rare shooting weapon's dice and give it Blast."],
+    ["Slasher",4,"Each smash hit it evades gives the attacker a hazard."]]],
+  "Precision":["Thread that needle.",[
+    ["Chrome-Whisperer",4,"Spend 2 Fury to drop up to 3 gears and that many hazards."],
+    ["Delicate Touch",3,"No template counts as hazardous for it, and Sluggish can't affect it."],
+    ["Doughnut",3,"In gear 1 at activation start, take a hazard to pivot around a corner."],
+    ["Fenderkiss",2,"Everyone in its collisions rolls 2 fewer smash dice."],
+    ["Purring",5,"With no hazards, gear changes, drifts and boosts cost no hazards."],
+    ["Slip Away",5,"Once per round after evading a tailgate or T-bone, make a forced move once the attacker finishes."]]],
+  "Pursuit":["High-speed interception.",[
+    ["Book 'Em",3,"A collision victim it damages with 6+ hazards must check for wipeout."],
+    ["Eat Your Ticket",2,"+3 smash dice against targets in gear 5+."],
+    ["On Your Tail",5,"Once per round, follow an enemy within Short with a short forced move after it moves."],
+    ["PIT",6,"Rear-half collision: take a hazard so smash hits knock gears off instead of dealing damage."],
+    ["Predatory Instincts",2,"May Give Way twice per round."],
+    ["Sheriff's Badge",3,"Re-roll attack dice against a target that dealt damage this round."]]],
+  "Pyromania":["Burn, baby, burn.",[
+    ["Burning Man",3,"+1 Armour while On Fire."],
+    ["Fire Walk With Me",1,"Fire damage to it is reduced by 3 (min 1)."],
+    ["Flame Trails",4,"While burning, leaves its movement templates behind as napalm."],
+    ["Hot Stuff",1,"Starts the game and respawns On Fire."],
+    ["Incendiary",1,"Its explosions and Blast radii have Fire."],
+    ["Raging Inferno",3,"Fire damage to vehicles within Medium is +1."]]],
+  "Reckless":["Death better ride hard.",[
+    ["Beerserker",5,"+1 Armour at 6+ hazards."],
+    ["Cut Up",3,"Swerve and Veer ignore vehicles; each one ignored takes a hazard."],
+    ["Drive Angry",1,"Gains a hazard at the start of every activation."],
+    ["Hog Wild",2,"Chooses whether its wipeout flip ignores obstructions."],
+    ["Live Fast",3,"With more hazards than Hull, may wipe out voluntarily in any Wipeout Step."],
+    ["Sourmash Jet Booster",4,"Ending its move with 6+ hazards forces a Long Straight move."]]],
+  "Rowdy":["Party hard.",[
+    ["Bring Your Friends",4,"+1 Crew.",{cr:1}],
+    ["Distracting Behaviour",3,"Enemies within Medium roll at most 3 handling dice."],
+    ["Free Booze",3,"Enemies within Medium can't use handling dice to shed hazards."],
+    ["Keep Up!",2,"Start of its Attack Step: slower vehicles within Medium take a hazard."],
+    ["Party Harder",3,"Vehicles within Medium gain 1 extra hazard whenever they gain any."],
+    ["Under The Table",2,"Clears its hazards when something within Medium wipes out or is wrecked."]]],
+  "Speed":["Open throttle, open road.",[
+    ["Burn Rubber",3,"Take 2 hazards to add a Short Straight before or after its template."],
+    ["Eager Beaver",2,"If first to activate in the round, gets a free Fury result."],
+    ["Floor It",2,"Once per round, take a hazard to go up a gear without dice."],
+    ["Hell For Leather",2,"Take 2 hazards to allow the Long Straight in any gear this activation."],
+    ["Kiss My Asphalt",4,"+1 Handling in gear 5, +2 in gear 6."],
+    ["Slipstream",2,"Hitting a rear edge, take 3 hazards to ignore it and shift up 0–2 gears."]]],
+  "Tech":["Flip this switch here…",[
+    ["Afterburners",4,"Before a forced wipeout check, jump to max gear."],
+    ["Automated Weapon Systems",3,"Take up to 3 hazards for that much extra Crew in its Attack Step."],
+    ["Exclusive Patents",2,"When an enemy within Long uses rare or Electrical gear you also have, hand it a hazard."],
+    ["Overclock",4,"Once per game, take 3 damage to double a rare or Electrical weapon's dice."],
+    ["Rocket Thrusters",3,"Forced straight moves can bend: Long 30°, or Medium 30°/60°."],
+    ["Satellite Navigation",3,"Bank Focus dice and swap them into later handling rolls for the team."]]],
+  "Wrench":["Greasy fingers, oily rags.",[
+    ["Field Repairs",3,"Respawns with D6 extra Hull."],
+    ["Grind Your Gears",3,"Once per round each way: turn damage into double hazards, or hazards into damage."],
+    ["Mobile Mechanic",4,"Once per activation, repair 1 HP on itself or a friend within Medium."],
+    ["Pneumatic Ram",2,"Respawns facing any direction."],
+    ["Snatch",3,"Once per collision after damaging someone, take up to 2 hazards to heal that much."],
+    ["Splashback",2,"Once per step, losing HP fires a 1-die attack at every vehicle within Medium."]]],
+};
+const PERK_CLASSES = Object.keys(PERKS);
+const PERK_BY_ID = {};
+PERK_CLASSES.forEach(c=>PERKS[c][1].forEach((p,i)=>{ PERK_BY_ID[c+"#"+i]={id:c+"#"+i,cls:c,n:p[0],cost:p[1],note:p[2],mod:p[3]||null}; }));
+
+/* sponsors: [name, requirement text, perk name, perk summary, check(team)->bool] */
+const SPONSORS = [
+  ["Chivo","Every vehicle costs 25+ cans.","Lowrider","+1 Handling while it has no hazards.", t=>t.cars.length>0 && t.cars.every(c=>c.cost>=25)],
+  ["Highway Patrol","Every vehicle has a Siren.","Rear View Mirror","Once per round, after an enemy places 3+ templates, take 2 hazards for a forced move.", t=>t.cars.length>0 && t.cars.every(c=>c.hasU("Siren"))],
+  ["Idris","Only Max Gear 6 vehicles.","Ludicrous Speed","Once per round, after finishing in gear 6, take damage equal to its Weight to activate again.", t=>t.cars.length>0 && t.cars.every(c=>c.st.mg>=6)],
+  ["Jumbo","Only Weight 4+ vehicles.","Goliath","Split a Weight 4+ vehicle's move and attack into two separate activations.", t=>t.cars.length>0 && t.cars.every(c=>c.st.wt>=4)],
+  ["Miyazaki","Every vehicle has 2+ perks.","Powerslide","Slide using almost any template instead of the Slide template.", t=>t.cars.length>0 && t.cars.every(c=>c.perks.length>=2)],
+  ["Mishkin","Every vehicle has a rare or Electrical weapon or upgrade.","Dynamo","After Boosting or Flipping, refill an ammo box on an Electrical item.", t=>t.cars.length>0 && t.cars.every(c=>c.hasRareOrElec)],
+  ["Maxxine","Only Weight 3 or less vehicles.","Skiing","Skips the Lose Control substep when it wipes out.", t=>t.cars.length>0 && t.cars.every(c=>c.st.wt<=3)],
+  ["Order of the Inferno","3+ Pyromania perks and/or Fire weapons across the team.","Eternal Flame","Its fire never goes out on its own.", t=>t.fireCount>=3],
+  ["Rusty","5+ upgrades across the team.","Drunk Driver","No straight templates. Only checks for wipeout at 8+ hazards.", t=>t.upgradeCount>=5],
+  ["Rutherford","5+ shooting weapons across the team, not counting Handguns.","Snap Shot","Once per round, take 2 hazards to fire back at the active vehicle after its Attack Step.", t=>t.shootCount>=5],
+  ["Scarlett","Total Crew is greater than total Weight.","Lashed","May Lash a vehicle alongside instead of shunting it.", t=>t.cars.length>0 && t.crewSum>t.weightSum],
+  ["Slime","Every vehicle has 1+ upgrade.","Pinball","Take a hazard to shunt yourself as well when you shunt.", t=>t.cars.length>0 && t.cars.every(c=>c.v.upgrades.length>=1)],
+  ["Verney","Every vehicle has 2+ different dropped weapons.","Pickle Button","Drop weapons anywhere along its move, and drop a second one in its Attack Step.", t=>t.cars.length>0 && t.cars.every(c=>c.droppedKinds>=2)],
+  ["The Warden","Every vehicle has Hull 10+.","Rigged","Explosion, smash or Blast damage makes it blast everything within Short with Weight dice.", t=>t.cars.length>0 && t.cars.every(c=>c.st.hl>=10)],
+  ["Beverly","Exactly one vehicle has Hull 12+.","Vengeful Spirits","Toughest car is the Soul Anchor; the rest are Ghost Riders it summons, passing through and igniting enemies.", t=>t.cars.filter(c=>c.st.hl>=12).length===1],
+];
+
+const GLOSSARY = [
+  ["Ammo X","Starts with X ammo boxes; tick one per use."],
+  ["Blast","Crits explode: attack everything within Short with that many dice."],
+  ["Electrical","Needs a Spark driver on the team, or a Van."],
+  ["Fire","An unignored hit sets the target On Fire: 1 damage each activation until it goes out."],
+  ["Ignores Armour X","The first X hits can't be cancelled by Armour or Evade."],
+  ["Indirect","Ignores obstacles and cover."],
+  ["Rattle","Each crit also gives the target a hazard."],
+  ["Splash","Attacks every vehicle under the template, friends too."],
+  ["Tactical","Hits do something other than damage."],
+  ["360","Fires in any direction; no facing needed."],
+  ["Volatile","+1 to explosion checks for each Ammo or Blast item on board."],
+];
+
+/* ============================== STATE ============================== */
+const LS_CUR="gtb.current.v1", LS_SAVES="gtb.saves.v1";
+let uid=1; const nid=()=> "x"+(uid++)+Math.random().toString(36).slice(2,6);
+function exampleTeam(){
+  return {name:"Example: Rust & Thunder", example:true, budget:50, sponsor:"", cars:[
+    {id:nid(),type:"Muscle Car",arch:"Speed Demon",named:true,driver:"Vera Voltage",second:"Badass",perks:["Speed#2","Badass#4"],
+      weapons:[{id:nid(),k:"Heavy Machine Gun",f:"Front"}],
+      upgrades:[{id:nid(),k:"Ram",f:"Front"}]},
+    {id:nid(),type:"Pickup",arch:"Gun Nut",named:false,driver:"",second:"",perks:["Fireworks#5"],
+      weapons:[{id:nid(),k:"Rockets",f:"Front"},{id:nid(),k:"Machine Gun",f:"Side"}],
+      upgrades:[{id:nid(),k:"Extra Crewmember"}]},
+  ]};
+}
+function blankTeam(){ return {name:"New team",budget:50,sponsor:"",cars:[]}; }
+function lsGet(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function encodeTeam(t){ const s=JSON.stringify(t); return btoa(unescape(encodeURIComponent(s))); }
+function decodeTeam(code){ const s=decodeURIComponent(escape(atob(code.trim()))); const t=JSON.parse(s); if(!t||!Array.isArray(t.cars)) throw new Error("bad"); return t; }
+function readHash(){ try{ const h=location.hash.slice(1); if(h.startsWith("t=")) return decodeTeam(decodeURIComponent(h.slice(2))); }catch(e){} return null; }
+let team = readHash() || lsGet(LS_CUR) || exampleTeam();
+team.cars.forEach(c=>{ c.id=c.id||nid(); c.weapons=c.weapons||[]; c.upgrades=c.upgrades||[]; c.perks=c.perks||[]; c.weapons.forEach(w=>w.id=w.id||nid()); c.upgrades.forEach(u=>u.id=u.id||nid()); });
+
+/* ============================== RULES ENGINE ============================== */
+function evalCar(v, teamCtx){
+  const b=VEHICLES[v.type];
+  const st={mg:b[0],hd:b[1],cr:b[2],wt:b[3],ar:b[4],hl:b[5],sl:b[6]};
+  const base={...st};
+  const rules=[...b[9]];
+  const issues=[];
+  const isVan = v.type==="Van", isTank=v.type==="Tank";
+  // upgrades: stat mods
+  v.upgrades.forEach(u=>{ const d=U[u.k]; if(!d) return; if(d.mod) for(const k in d.mod) st[k]+=d.mod[k]; if(d.trailer){ st.sl+=d.trailer; } });
+  v.perks.forEach(pid=>{ const p=PERK_BY_ID[pid]; if(p&&p.mod) for(const k in p.mod) st[k]+=p.mod[k]; });
+  if(st.mg>6) st.mg=6;
+  const trailer=v.upgrades.map(u=>U[u.k]).find(d=>d&&d.trailer);
+  if(trailer){ if(!rules.includes("Articulated")) rules.push("Articulated"); if(trailer.trailer>=2&&!rules.includes("Hefty")) rules.push("Hefty"); if(trailer.trailer>=3&&!rules.includes("Sluggish")) rules.push("Sluggish"); }
+  // costs + slots
+  let cost=b[7]; let slotsUsed=0;
+  const wCost=w=>W[w.k]?W[w.k].cost:0;
+  v.weapons.forEach(w=>{ const d=W[w.k]; if(!d) return; cost+=d.cost; slotsUsed+=d.slots; });
+  // upgrade slot needs, Van reduces up to 3 upgrades by 1
+  const upSlots=v.upgrades.map(u=>{ const d=U[u.k]; if(!d) return 0; if(d.turret&&isTank) return 0; return d.slots; });
+  if(isVan){ const idx=upSlots.map((s,i)=>[s,i]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,3); idx.forEach(([s,i])=>upSlots[i]=s-1); }
+  v.upgrades.forEach((u,i)=>{ const d=U[u.k]; if(!d) return; slotsUsed+=upSlots[i];
+    if(d.turret){ const tw=v.weapons.find(w=>w.id===u.target); cost+=2+(tw?wCost(tw):0); if(!tw) issues.push(["Turret Mount needs a weapon to mount.","w"]); else if((W[tw.k].tags||[]).includes("360")||W[tw.k].cat==="Dropped") issues.push([`Turret Mount on ${tw.k} does nothing: it isn't a facing weapon.`,"w"]); }
+    else cost+=d.cost; });
+  v.perks.forEach(pid=>{ const p=PERK_BY_ID[pid]; if(p) cost+=p.cost; });
+  if(slotsUsed>st.sl) issues.push([`Uses ${slotsUsed} build slots but has ${st.sl}.`]);
+  // per-vehicle restrictions
+  const seen={};
+  v.upgrades.forEach(u=>{ const d=U[u.k]; if(!d) return; if(d.cat==="Common"){ seen[u.k]=(seen[u.k]||0)+1; if(seen[u.k]===2) issues.push([`${u.k} can only be fitted once per vehicle.`]); } });
+  const seenD={};
+  v.weapons.forEach(w=>{ const d=W[w.k]; if(d&&d.cat==="Dropped"){ seenD[w.k]=(seenD[w.k]||0)+1; if(seenD[w.k]===2) issues.push([`${w.k} can only be fitted once per vehicle.`]); } });
+  const trailers=v.upgrades.filter(u=>U[u.k]&&U[u.k].trailer);
+  if(trailers.length>1) issues.push(["Only one trailer per vehicle."]);
+  trailers.forEach(u=>{ const d=U[u.k]; if(base.wt+(v.upgrades.some(x=>x.k==="Heavy Frame")?1:0)<d.weightMin) issues.push([`${u.k} needs Weight ${d.weightMin}+.`]); if(rules.includes("Airborne")) issues.push(["Airborne vehicles can't tow trailers."]); });
+  const elecOK = isVan || teamCtx.spark;
+  const hasElec=[...v.weapons.map(w=>W[w.k]),...v.upgrades.map(u=>U[u.k])].some(d=>d&&(d.tags||[]).includes("Electrical"));
+  if(hasElec && !elecOK) issues.push(["Electrical gear needs a Spark driver on the team (or a Van)."]);
+  // perks must be unlocked
+  const unlocked=new Set(); if(v.arch&&ARCH[v.arch]) unlocked.add(ARCH[v.arch][0]); if(v.named&&v.second) unlocked.add(v.second);
+  v.perks.forEach(pid=>{ const p=PERK_BY_ID[pid]; if(p&&!unlocked.has(p.cls)) issues.push([`${p.n} needs the ${p.cls} perk class unlocked.`]); });
+  const droppedKinds=new Set(v.weapons.filter(w=>W[w.k]&&W[w.k].cat==="Dropped").map(w=>w.k)).size;
+  const hasRareOrElec=[...v.weapons.map(w=>W[w.k]),...v.upgrades.map(u=>U[u.k])].some(d=>d&&(d.cat==="Rare"||(d.tags||[]).includes("Electrical")));
+  return {v,st,base,rules,cost,slotsUsed,issues,unlocked,droppedKinds,hasRareOrElec,perks:v.perks,hasU:k=>v.upgrades.some(u=>u.k===k)};
+}
+function evalTeam(t){
+  const spark=t.cars.some(c=>c.arch==="Spark");
+  const cars=t.cars.map(v=>evalCar(v,{spark}));
+  const total=cars.reduce((a,c)=>a+c.cost,0);
+  const issues=[];
+  if(total>t.budget) issues.push([`Team costs ${total} cans, ${total-t.budget} over the ${t.budget}-can limit.`]);
+  // vehicle count, Mob
+  let bikes=0, counted=0; cars.forEach(c=>{ if(c.v.type==="Bike"){ bikes++; if(bikes===1) return; } counted++; });
+  const maxV=Math.floor(t.budget/20);
+  if(counted>maxV) issues.push([`${counted} vehicles count toward the limit; ${t.budget} cans allows ${maxV} (one per full 20 cans${bikes?", first Bike is free":""}).`]);
+  // rare vehicles (first bike exempt via Mob)
+  const rareSeen={}; let bikeSeen=0;
+  cars.forEach(c=>{ const b=VEHICLES[c.v.type]; if(!b[8]) return; if(c.v.type==="Bike"){ bikeSeen++; if(bikeSeen===1) return; } rareSeen[c.v.type]=(rareSeen[c.v.type]||0)+1; });
+  Object.entries(rareSeen).forEach(([k,n])=>{ if(n>1) issues.push([`Only one ${k} allowed: it's a rare vehicle type.`]); });
+  // archetypes unique
+  const archSeen={}; t.cars.forEach(v=>{ if(v.arch){ archSeen[v.arch]=(archSeen[v.arch]||0)+1; } });
+  Object.entries(archSeen).forEach(([k,n])=>{ if(n>1) issues.push([`Each driver archetype can only be used once: ${k} appears ${n} times.`]); });
+  // rare weapons / upgrades once per team
+  const rw={}; t.cars.forEach(v=>{ v.weapons.forEach(w=>{ if(W[w.k]&&W[w.k].cat==="Rare") rw[w.k]=(rw[w.k]||0)+1; }); v.upgrades.forEach(u=>{ if(U[u.k]&&U[u.k].cat==="Rare") rw[u.k]=(rw[u.k]||0)+1; }); });
+  Object.entries(rw).forEach(([k,n])=>{ if(n>1) issues.push([`${k} is rare: one per team.`]); });
+  const ctx={cars,
+    fireCount: t.cars.reduce((a,v)=>a+v.perks.filter(p=>PERK_BY_ID[p]&&PERK_BY_ID[p].cls==="Pyromania").length+v.weapons.filter(w=>W[w.k]&&W[w.k].tags.includes("Fire")).length,0),
+    upgradeCount: t.cars.reduce((a,v)=>a+v.upgrades.length,0),
+    shootCount: t.cars.reduce((a,v)=>a+v.weapons.filter(w=>W[w.k]&&SHOOTING_CATS.includes(W[w.k].cat)&&w.k!=="Handgun").length,0),
+    crewSum: cars.reduce((a,c)=>a+c.st.cr,0), weightSum: cars.reduce((a,c)=>a+c.st.wt,0)};
+  const elig={}; SPONSORS.forEach(s=>elig[s[0]]=!!s[4](ctx));
+  if(t.sponsor && !elig[t.sponsor]) issues.push([`Team doesn't meet ${t.sponsor}'s requirement yet.`,"w"]);
+  return {cars,total,issues,maxV,counted,elig,ctx};
+}
+
+/* ============================== RENDER ============================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const opt=(v,l,sel,dis)=>`<option value="${esc(v)}"${sel?" selected":""}${dis?" disabled":""}>${esc(l)}</option>`;
+function tagLine(d){ const t=[...(d.tags||[])]; return t.join(" · "); }
+
+function vehicleOptions(sel){
+  const common=Object.keys(VEHICLES).filter(k=>!VEHICLES[k][8]), rare=Object.keys(VEHICLES).filter(k=>VEHICLES[k][8]);
+  const o=k=>opt(k,`${k} · ${VEHICLES[k][7]} cans`,k===sel);
+  return `<optgroup label="Common">${common.map(o).join("")}</optgroup><optgroup label="Rare (one each per team)">${rare.map(o).join("")}</optgroup>`;
+}
+function weaponPicker(){
+  const groups=[["Common","Common weapons"],["Hand","Hand weapons (crew-carried, 360°, no slots)"],["Dropped","Dropped weapons (rear, no slots)"],["Rare","Rare weapons (one per team)"]];
+  return `<option value="">+ Add weapon…</option>`+groups.map(([c,l])=>`<optgroup label="${l}">${Object.values(W).filter(w=>w.cat===c).map(w=>opt(w.n,`${w.n} · ${w.cost||"free"}${w.cost?" c":""} · ${w.slots} sl · ${w.dice}`)).join("")}</optgroup>`).join("");
+}
+function upgradePicker(){
+  const groups=[["Common","Common upgrades (once per vehicle)"],["Rare","Rare upgrades (one per team)"]];
+  return `<option value="">+ Add upgrade…</option>`+groups.map(([c,l])=>`<optgroup label="${l}">${Object.values(U).filter(u=>u.cat===c).map(u=>opt(u.n,`${u.n} · ${u.turret?"2+X":u.cost} c · ${u.trailer?"+"+u.trailer:u.slots} sl`)).join("")}</optgroup>`).join("");
+}
+function statCell(k,label,val,base,extra){ const cls= val>base?"up":val<base?"down":""; return `<div class="stat"><div class="k">${label}</div><div class="v ${cls}">${val}</div>${extra||""}</div>`; }
+
+function renderCar(c, i, T){
+  const v=c.v, st=c.st, b=c.base;
+  const gear=`<div class="gear-track" aria-hidden="true">${[1,2,3,4,5,6].map(g=>`<span class="${g<=st.mg?"on":""}"></span>`).join("")}</div>`;
+  const slots=Array.from({length:Math.max(st.sl,c.slotsUsed)},(_,k)=>`<span class="${k<c.slotsUsed?(k>=st.sl?"over":"used"):""}"></span>`).join("");
+  const sponsorRule = T.sponsor && T.elig[T.sponsor] ? SPONSORS.find(s=>s[0]===T.sponsor) : null;
+  const ruleChips=c.rules.map(r=>`<span class="rule" title="${esc(VEHICLE_RULES[r]||"")}">${esc(r)}</span>`).join("")
+    + (sponsorRule?`<span class="rule sp" title="${esc(sponsorRule[3])}">${esc(sponsorRule[2])} (${esc(sponsorRule[0])})</span>`:"");
+  const archOpts=`<option value="">No archetype</option>`+Object.keys(ARCH).map(a=>{ const taken=team.cars.some(o=>o!==v&&o.arch===a); return opt(a,`${a} · ${ARCH[a][0]}${taken?" (taken)":""}`,a===v.arch); }).join("");
+  const secondOpts=`<option value="">Pick a second perk class…</option>`+PERK_CLASSES.filter(p=>!(v.arch&&ARCH[v.arch][0]===p)).map(p=>opt(p,p,p===v.second)).join("");
+  const unlocked=[...c.unlocked];
+  const perkHtml = unlocked.length? unlocked.map(cls=>`<div class="perk-class">${esc(cls)} <span class="note">· ${esc(PERKS[cls][0])}</span></div>`+PERKS[cls][1].map((p,pi)=>{ const id=cls+"#"+pi, on=v.perks.includes(id); return `<label class="perk ${on?"on":""}"><input type="checkbox" data-act="perk" data-car="${v.id}" data-perk="${id}" ${on?"checked":""}><span class="pn">${esc(p[0])}<small>${esc(p[2])}</small></span><span class="pc">${p[1]} c</span></label>`; }).join("")).join("")
+    : `<p class="note">Pick an archetype to unlock its perk class. Name the driver to unlock a second class of your choice.</p>`;
+  const weaponsHtml=v.weapons.map(w=>{ const d=W[w.k]; if(!d) return ""; const turret=v.upgrades.find(u=>U[u.k]&&U[u.k].turret&&u.target===w.id); const needsFacing=!d.tags.includes("360")&&d.cat!=="Dropped"&&!turret;
+      const face= needsFacing?`<select data-act="wface" data-car="${v.id}" data-item="${w.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(w.f||"Front")===f)).join("")}</select>`
+        : `<span class="note">${d.cat==="Dropped"?"Rear":turret?"360° turret":"360°"}</span>`;
+      return `<div class="item"><div class="nm">${esc(d.n)}<small>${esc(d.range)} · ${esc(d.dice)}${d.tags.length?" · "+esc(tagLine(d)):""}${d.note?" — "+esc(d.note):""}</small></div><span class="pr">${d.cost} c · ${d.slots} sl</span><button class="x" data-act="wdel" data-car="${v.id}" data-item="${w.id}" aria-label="Remove ${esc(d.n)}">×</button><div class="ctl">${face}</div></div>`; }).join("");
+  const upgradesHtml=v.upgrades.map(u=>{ const d=U[u.k]; if(!d) return "";
+      let ctl="";
+      if(d.facing) ctl=`<select data-act="uface" data-car="${v.id}" data-item="${u.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(u.f||"Front")===f)).join("")}</select>`;
+      if(d.turret){ const facingW=v.weapons.filter(w=>W[w.k]&&W[w.k].cat!=="Dropped"&&!W[w.k].tags.includes("360")); ctl=`<select data-act="utarget" data-car="${v.id}" data-item="${u.id}" aria-label="Turret weapon"><option value="">Mount which weapon?</option>${facingW.map(w=>opt(w.id,`${w.k} (+${W[w.k].cost} c)`,u.target===w.id)).join("")}</select>`; }
+      const tw=d.turret?v.weapons.find(w=>w.id===u.target):null;
+      const price=d.turret?(2+(tw?W[tw.k].cost:0)):d.cost;
+      const sl=d.trailer?`+${d.trailer}`:(d.turret&&v.type==="Tank"?0:d.slots);
+      return `<div class="item"><div class="nm">${esc(d.n)}<small>${d.tags.length?esc(tagLine(d))+" — ":""}${esc(d.note)}</small></div><span class="pr">${price} c · ${sl} sl</span><button class="x" data-act="udel" data-car="${v.id}" data-item="${u.id}" aria-label="Remove ${esc(d.n)}">×</button>${ctl?`<div class="ctl">${ctl}</div>`:""}</div>`; }).join("");
+  const perkCost=v.perks.reduce((a,p)=>a+(PERK_BY_ID[p]?PERK_BY_ID[p].cost:0),0);
+  return `<article class="car" aria-label="Vehicle ${i+1}">
+    <div class="car-head"><span class="num">${i+1}</span>
+      <select data-act="type" data-car="${v.id}" aria-label="Vehicle type">${vehicleOptions(v.type)}</select>
+      <span class="cost">${c.cost}<small>cans</small></span></div>
+    <div class="car-body">
+      <div class="stats">
+        ${statCell("mg","Gear",st.mg,b.mg,gear)}${statCell("hd","Handling",st.hd,b.hd)}${statCell("cr","Crew",st.cr,b.cr)}${statCell("wt","Weight",st.wt,b.wt)}${statCell("ar","Armour",st.ar,b.ar)}${statCell("hl","Hull",st.hl,b.hl)}
+      </div>
+      <div class="meta-row"><span class="lbl">Hull</span><span class="hull" aria-label="${st.hl} hull points">${"<span></span>".repeat(st.hl)}</span></div>
+      <div class="meta-row"><span class="lbl">Build slots</span><span class="slots" aria-label="${c.slotsUsed} of ${st.sl} build slots used">${slots}</span><span class="note"><b>${c.slotsUsed}</b> / ${st.sl}${v.type==="Van"?" · Van discount applied":""}</span></div>
+      ${ruleChips?`<div class="rules">${ruleChips}</div>`:""}
+      ${c.issues.length?`<div class="issues">${c.issues.map(x=>`<div class="issue ${x[1]==="w"?"w":""}">${esc(x[0])}</div>`).join("")}</div>`:""}
+
+      <div class="sec"><div class="sec-h"><h3>Driver</h3><span class="meta">${v.arch?esc(ARCH[v.arch][0]):"No perk class yet"}${v.named&&v.second?" + "+esc(v.second):""}</span></div>
+        <div class="driver-grid">
+          <div class="field"><label for="a-${v.id}">Archetype</label><select id="a-${v.id}" data-act="arch" data-car="${v.id}">${archOpts}</select></div>
+          <div class="field"><label for="n-${v.id}">Driver name (unlocks a 2nd class)</label><input type="text" id="n-${v.id}" data-act="driver" data-car="${v.id}" value="${esc(v.driver||"")}" placeholder="Unnamed"></div>
+        </div>
+        ${v.arch?`<p class="note"><b>${esc(v.arch)}:</b> ${esc(ARCH[v.arch][1])}</p>`:""}
+        ${v.named?`<div class="field"><label for="s-${v.id}">Second perk class</label><select id="s-${v.id}" data-act="second" data-car="${v.id}">${secondOpts}</select></div>`:""}
+      </div>
+
+      <div class="sec"><div class="sec-h"><h3>Perks</h3><span class="meta">${v.perks.length} picked · ${perkCost} cans</span></div>
+        <div class="perks">${perkHtml}</div></div>
+
+      <div class="sec"><div class="sec-h"><h3>Weapons</h3><span class="meta">${v.weapons.length}</span></div>
+        <div class="items">${weaponsHtml}</div>
+        <div class="adder"><select data-act="wadd" data-car="${v.id}" aria-label="Add weapon">${weaponPicker()}</select></div></div>
+
+      <div class="sec"><div class="sec-h"><h3>Upgrades</h3><span class="meta">${v.upgrades.length}</span></div>
+        <div class="items">${upgradesHtml}</div>
+        <div class="adder"><select data-act="uadd" data-car="${v.id}" aria-label="Add upgrade">${upgradePicker()}</select></div></div>
+
+      <div class="car-foot">
+        <button class="btn small" data-act="dup" data-car="${v.id}">Duplicate</button>
+        <button class="btn small danger" data-act="del" data-car="${v.id}">Remove vehicle</button>
+      </div>
+    </div></article>`;
+}
+
+let confirmDel=null;
+function render(){
+  const T=evalTeam(team); T.sponsor=team.sponsor;
+  const over=T.total>team.budget;
+  const legal=T.issues.filter(x=>x[1]!=="w").length===0 && T.cars.every(c=>c.issues.filter(x=>x[1]!=="w").length===0);
+  const bud=[25,35,40,50,60,70,80,100];
+  const custom=team.customBudget||!bud.includes(team.budget);
+  $("#board").innerHTML=`<div class="board-row">
+      <div class="field team-name"><label for="tname">Team name ${team.example?'<span class="chip-ex">Example</span>':""}</label><input type="text" id="tname" data-act="tname" value="${esc(team.name)}"></div>
+      <div class="field budget"><label for="tbud">Team size</label><div class="bud-row"><select id="tbud" data-act="budget">${bud.map(b=>opt(b,`${b} cans`,!custom&&b===team.budget)).join("")}${opt("custom","Custom…",custom)}</select>${custom?`<input type="number" id="tbudc" data-act="budgetc" min="1" max="999" step="1" inputmode="numeric" value="${team.budget}" aria-label="Custom cans">`:""}</div></div>
+      <div class="gauge"><div class="gauge-top"><span><b>${T.total}</b> / ${team.budget} cans</span><span class="sub">${T.counted} / ${T.maxV} vehicles</span><span class="status-pill ${legal?(over?"no":"ok"):"no"}">${legal?"Legal":"Not legal yet"}</span></div>
+        <div class="bar ${over?"over":""}"><i style="width:${Math.min(100,(T.total/team.budget)*100)}%"></i></div></div>
+    </div>
+    ${T.issues.length?`<div class="issues">${T.issues.map(x=>`<div class="issue ${x[1]==="w"?"w":""}">${esc(x[0])}</div>`).join("")}</div>`:""}`;
+  const ctxT={sponsor:team.sponsor,elig:T.elig};
+  $("#cars").innerHTML=T.cars.map((c,i)=>renderCar(c,i,ctxT)).join("")+
+    `<div class="add-car"><span class="lbl">Add a vehicle</span><select data-act="addcar" aria-label="Add a vehicle"><option value="">Choose a vehicle type…</option>${vehicleOptions("")}</select></div>`;
+  const saves=lsGet(LS_SAVES)||[];
+  $("#aside").innerHTML=`
+    <section class="panel"><h2>Sponsor</h2>
+      <p class="note">One sponsor per team. Every vehicle gets its perk while the team meets the requirement.</p>
+      <label class="sponsor ${team.sponsor?"":""}"><input type="radio" name="sp" data-act="sponsor" value="" ${team.sponsor?"":"checked"}><span class="sn">No sponsor</span></label>
+      ${SPONSORS.map(s=>{ const ok=T.elig[s[0]]; return `<label class="sponsor ${ok?"":"dim"}"><input type="radio" name="sp" data-act="sponsor" value="${esc(s[0])}" ${team.sponsor===s[0]?"checked":""}><span class="sn">${esc(s[0])} <span class="status-pill ${ok?"ok":"meh"}">${ok?"Qualifies":"Not yet"}</span></span><span class="sr">${esc(s[1])}</span><span class="sp"><b>${esc(s[2])}:</b> ${esc(s[3])}</span></label>`; }).join("")}
+    </section>
+    <section class="panel"><h2>Garage</h2>
+      <div class="tools" style="margin-bottom:10px">
+        <button class="btn primary small" data-act="save">Save team</button>
+        <button class="btn small" data-act="new">New team</button>
+        <button class="btn small ghost" data-act="example">Load example</button>
+      </div>
+      <div class="save-list">${saves.length?saves.map((s,i)=>`<div class="save-row"><span title="${esc(s.name)}">${esc(s.name)} · ${s.total} c</span><span style="display:flex;gap:6px">${confirmDel===i?`<button class="btn small danger" data-act="sdelok" data-i="${i}">Delete</button><button class="btn small" data-act="sdelno">Keep</button>`:`<button class="btn small" data-act="sload" data-i="${i}">Load</button><button class="btn small ghost" data-act="sdel" data-i="${i}" aria-label="Delete ${esc(s.name)}">×</button>`}</span></div>`).join(""):`<p class="note">Saved teams live in this browser on this device. To move a team to your phone, use the share code below.</p>`}</div>
+    </section>
+    <section class="panel"><h2>Share</h2>
+      <p class="note">The page link always carries the current team: bookmark it or text it to yourself. The code below does the same job if a link gets cut off.</p>
+      <textarea id="code" readonly>${esc(encodeTeam(stripTeam(team)))}</textarea>
+      <div class="tools" style="margin-top:8px"><button class="btn small primary" data-act="copylink">Copy link</button><button class="btn small" data-act="copy">Copy code</button></div>
+      <label class="lbl" for="paste" style="display:block;margin-top:12px">Paste a code</label>
+      <textarea id="paste" placeholder="Paste a share code here"></textarea>
+      <div class="tools" style="margin-top:8px"><button class="btn small" data-act="import">Load code</button></div>
+    </section>
+    <section class="panel"><details class="glossary"><summary>Weapon rules glossary</summary>
+      <div class="gl">${GLOSSARY.map(g=>`<b>${esc(g[0])}</b><span>${esc(g[1])}</span>`).join("")}</div></details></section>`;
+  persist();
+}
+function stripTeam(t){ return {name:t.name,budget:t.budget,customBudget:!!t.customBudget,sponsor:t.sponsor,cars:t.cars.map(c=>({type:c.type,arch:c.arch,named:c.named,driver:c.driver,second:c.second,perks:c.perks,weapons:c.weapons.map(w=>({k:w.k,f:w.f,id:w.id})),upgrades:c.upgrades.map(u=>({k:u.k,f:u.f,target:u.target,id:u.id}))}))}; }
+function persist(){ lsSet(LS_CUR,team); try{ history.replaceState(null,"","#t="+encodeURIComponent(encodeTeam(stripTeam(team)))); }catch(e){} }
+let toastT; function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,1800); }
+
+/* ============================== EVENTS ============================== */
+const carById=id=>team.cars.find(c=>c.id===id);
+function pruneCar(v){ // drop perks from classes no longer unlocked
+  const un=new Set(); if(v.arch) un.add(ARCH[v.arch][0]); if(v.named&&v.second) un.add(v.second);
+  v.perks=v.perks.filter(p=>PERK_BY_ID[p]&&un.has(PERK_BY_ID[p].cls));
+  v.upgrades.forEach(u=>{ if(U[u.k]&&U[u.k].turret&&!v.weapons.some(w=>w.id===u.target)) u.target=""; });
+}
+function touch(){ team.example=false; }
+document.addEventListener("change",e=>{
+  const el=e.target, a=el.dataset.act; if(!a) return; const v=el.dataset.car?carById(el.dataset.car):null;
+  switch(a){
+    case "budget": if(el.value==="custom"){ team.customBudget=true; } else { team.budget=+el.value; team.customBudget=false; } break;
+    case "budgetc": { const n=parseInt(el.value,10); if(n>=1&&n<=999){ team.budget=n; team.customBudget=true; } } break;
+    case "type": v.type=el.value; break;
+    case "arch": v.arch=el.value; if(v.second===(v.arch&&ARCH[v.arch][0])) v.second=""; pruneCar(v); break;
+    case "second": v.second=el.value; pruneCar(v); break;
+    case "driver": v.driver=el.value.trim(); v.named=!!v.driver; if(!v.named) v.second=""; pruneCar(v); break;
+    case "tname": team.name=el.value.trim()||"Untitled team"; break;
+    case "perk": if(el.checked){ if(!v.perks.includes(el.dataset.perk)) v.perks.push(el.dataset.perk); } else v.perks=v.perks.filter(p=>p!==el.dataset.perk); break;
+    case "wadd": if(el.value){ const d=W[el.value]; v.weapons.push({id:nid(),k:el.value,f:d.cat==="Dropped"||d.tags.includes("360")?undefined:"Front"}); } break;
+    case "uadd": if(el.value){ const d=U[el.value]; v.upgrades.push({id:nid(),k:el.value,f:d.facing?"Front":undefined,target:""}); } break;
+    case "wface": { const w=v.weapons.find(x=>x.id===el.dataset.item); w.f=el.value; } break;
+    case "uface": { const u=v.upgrades.find(x=>x.id===el.dataset.item); u.f=el.value; } break;
+    case "utarget": { const u=v.upgrades.find(x=>x.id===el.dataset.item); u.target=el.value; } break;
+    case "addcar": if(el.value){ team.cars.push({id:nid(),type:el.value,arch:"",named:false,driver:"",second:"",perks:[],weapons:[],upgrades:[]}); } break;
+    case "sponsor": team.sponsor=el.value; break;
+    default: return;
+  }
+  touch(); render();
+});
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-act]"); if(!el||el.tagName==="SELECT"||el.tagName==="INPUT") return;
+  const a=el.dataset.act, v=el.dataset.car?carById(el.dataset.car):null;
+  switch(a){
+    case "wdel": v.weapons=v.weapons.filter(w=>w.id!==el.dataset.item); pruneCar(v); break;
+    case "udel": v.upgrades=v.upgrades.filter(u=>u.id!==el.dataset.item); break;
+    case "del": team.cars=team.cars.filter(c=>c!==v); break;
+    case "dup": { const c=JSON.parse(JSON.stringify(v)); c.id=nid(); c.arch=""; c.named=false; c.driver=""; c.second=""; c.perks=[]; c.weapons.forEach(w=>w.id=nid()); const map={}; v.weapons.forEach((w,i)=>map[w.id]=c.weapons[i].id); c.upgrades.forEach(u=>{u.id=nid(); if(u.target) u.target=map[u.target]||"";}); team.cars.push(c); toast("Vehicle duplicated (driver left blank)"); } break;
+    case "save": { const saves=lsGet(LS_SAVES)||[]; const T=evalTeam(team); const entry={name:team.name,total:T.total,team:stripTeam(team)}; const i=saves.findIndex(s=>s.name===team.name); if(i>=0) saves[i]=entry; else saves.unshift(entry); lsSet(LS_SAVES,saves); confirmDel=null; toast("Saved to this browser"); } break;
+    case "sload": { const s=(lsGet(LS_SAVES)||[])[+el.dataset.i]; if(s){ team=hydrate(s.team); toast("Loaded "+s.name); } } break;
+    case "sdel": confirmDel=+el.dataset.i; render(); return;
+    case "sdelno": confirmDel=null; render(); return;
+    case "sdelok": { const saves=lsGet(LS_SAVES)||[]; saves.splice(+el.dataset.i,1); lsSet(LS_SAVES,saves); confirmDel=null; toast("Deleted"); } break;
+    case "new": team=blankTeam(); break;
+    case "example": team=exampleTeam(); break;
+    case "copy": { const code=$("#code").value; const done=()=>toast("Code copied"); try{ navigator.clipboard.writeText(code).then(done,()=>{ $("#code").select(); toast("Select-all done: copy it manually"); }); }catch(err){ $("#code").select(); toast("Select-all done: copy it manually"); } } return;
+    case "copylink": { const url=location.href; const done=()=>toast("Link copied"); try{ navigator.clipboard.writeText(url).then(done,()=>{ $("#code").select(); toast("Couldn't copy the link; copy the code instead"); }); }catch(err){ toast("Couldn't copy the link; copy the code instead"); } } return;
+    case "import": { try{ team=hydrate(decodeTeam($("#paste").value)); toast("Team loaded"); }catch(err){ toast("That code didn't load. Check you pasted all of it."); return; } } break;
+    default: return;
+  }
+  if(a!=="example"&&a!=="new"&&a!=="sload"&&a!=="import") touch();
+  render();
+});
+function hydrate(t){ t.cars=(t.cars||[]).filter(c=>VEHICLES[c.type]); t.cars.forEach(c=>{ c.id=nid(); c.perks=(c.perks||[]).filter(p=>PERK_BY_ID[p]); c.weapons=(c.weapons||[]).filter(w=>W[w.k]); c.upgrades=(c.upgrades||[]).filter(u=>U[u.k]); c.weapons.forEach(w=>w.id=w.id||nid()); c.upgrades.forEach(u=>u.id=u.id||nid()); }); t.budget=+t.budget||50; t.sponsor=t.sponsor||""; return t; }
+team=hydrate(team);
+render();
+</script>
+</body>
+</html>
