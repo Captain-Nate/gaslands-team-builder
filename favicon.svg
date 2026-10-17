@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#16181a"/>
+  <g transform="translate(0,-2.5)">
+    <!-- '69 fastback in profile, nose left: forward-leaning nose, long hood with scoop, short roof, long low fastback, ducktail -->
+    <path fill="#ff7a2e" d="M3 33.2 L10 31.6 Q13.5 29.4 17 31 L25 30.2 L31.5 24.6 Q34.5 23.8 38.5 24.3 L56 29.4 L61 29.8 L60.6 35.8 L59.6 38.6 L56.6 39.6 L54.6 39.6 A6.1 6.1 0 0 0 42.4 39.6 L20.1 39.6 A6.1 6.1 0 0 0 7.9 39.6 L5.2 39.6 L4.3 38.8 Z"/>
+    <!-- side glass, split by the B-pillar -->
+    <path fill="#16181a" d="M28.6 29.6 L32.4 25.8 Q35 25.2 38.2 25.6 L46.2 29.6 Z"/>
+    <path stroke="#ff7a2e" stroke-width="1.5" d="M37.2 25.3 L37.2 29.9"/>
+    <!-- side stripe -->
+    <path stroke="#16181a" stroke-width="1.2" stroke-linecap="round" d="M7 33.6 L57.5 32.6"/>
+    <!-- wheels -->
+    <circle cx="14" cy="40" r="4.9" fill="#2b3036"/>
+    <circle cx="48.5" cy="40" r="4.9" fill="#2b3036"/>
+    <circle cx="14" cy="40" r="1.9" fill="#ff7a2e"/>
+    <circle cx="48.5" cy="40" r="1.9" fill="#ff7a2e"/>
+  </g>
+</svg>
