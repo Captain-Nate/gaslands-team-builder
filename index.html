@@ -300,6 +300,28 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .cbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .play-cars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:18px}
 .play-cars.one{max-width:980px}
+.play-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+.qr-side{display:none}
+@media (min-width:1100px){.play-layout{grid-template-columns:minmax(0,1fr) 320px}.qr-side{display:block;position:sticky;top:calc(12px + env(safe-area-inset-top,0px));max-height:calc(100vh - 24px);overflow:auto}.qr-mobile{display:none}}
+.qr-side h2{font-family:var(--display);font-weight:400;font-size:22px;margin:0 0 10px}
+.qr-mobile summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.qr-mobile summary::-webkit-details-marker{display:none}
+.qr-mobile summary::after{content:"Show";font-family:var(--cond);font-weight:600;font-size:14px;color:var(--accent)}
+.qr-mobile[open] summary::after{content:"Hide"}
+.qr-mobile .qr{margin-top:10px}
+.qr{display:flex;flex-direction:column;gap:14px;font-size:14.5px}
+.qr p{margin:0}
+.qr-sec{display:flex;flex-direction:column;gap:7px}
+.qr-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.qr-steps li b{display:block}
+.qr-steps li span{color:var(--muted)}
+.qr-ff{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.focus{color:var(--good)} .fury{color:var(--accent)}
+.qr-table{border-collapse:collapse;width:100%;font-family:var(--cond);font-variant-numeric:tabular-nums;font-size:15px}
+.qr-table th,.qr-table td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--line)}
+.qr-table th{font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.qr-foot{font-size:12.5px}
+.ff{font-family:var(--cond);font-size:14px;margin-top:2px}
 @media (min-width:900px){
   .play .dash{padding:20px 24px;gap:18px;border-radius:18px}
   .play .dash-h b{font-size:30px}
@@ -1196,6 +1218,25 @@ function ammoItems(v){
   v.upgrades.forEach((u,ui)=>{ const d=U[u.k]; if(!d) return; const t=(d.tags||[]).find(x=>x.startsWith("Ammo")); if(t) out.push({key:"u"+ui,name:d.n,kind:"u",n:parseInt(t.split(" ")[1],10)+extra}); });
   return out;
 }
+let QROPEN=false;
+function ffFaces(g){ g=Math.max(1,Math.min(6,g||1)); const lo=Math.max(2,g); return [lo===6?"6":`${lo}–6`, lo-1===1?"1":`1–${lo-1}`]; }
+function quickRulesHtml(){
+  return `<div class="qr">
+    <div class="qr-sec"><span class="lbl">Each activation, in order</span>
+      <ol class="qr-steps">
+        <li><b>Movement Step</b><span>Roll handling dice equal to your Handling. Each die is a Focus or a Fury. Spend them on actions like shifting gear or Redline, then move.</span></li>
+        <li><b>Attack Step</b><span>One attack per crew member.</span></li>
+        <li><b>Wipeout Step</b><span>Check whether the car wipes out.</span></li>
+      </ol></div>
+    <div class="qr-sec"><span class="lbl">Focus vs Fury</span>
+      <p>Handling dice are ordinary d6s, read against your current gear.</p>
+      <ul class="qr-ff"><li><b class="focus">Focus</b> rolls equal to or above your current gear.</li><li><b class="fury">Fury</b> rolls below your current gear, and every 1.</li></ul>
+      <table class="qr-table"><thead><tr><th>Gear</th><th class="focus">Focus</th><th class="fury">Fury</th></tr></thead>
+        <tbody>${[1,2,3,4,5,6].map(g=>`<tr><td>${g}</td><td>${ffFaces(g)[0]}</td><td>${ffFaces(g)[1]}</td></tr>`).join("")}</tbody></table>
+      <p class="note">The faster you go, the more Fury you roll: speed costs control.</p></div>
+    <p class="note qr-foot">Unofficial summary of the third-edition playtest. Your rulebook wins.</p>
+  </div>`;
+}
 function renderPlay(){
   const T=evalTeam(team);
   if(!T.cars.length) return `<section class="play"><div class="hero"><h2 class="hero-h">No cars yet</h2><p class="hero-p">Build a team first, then come back here to track it during the game.</p><div class="hero-actions"><button class="btn primary big" data-act="startwiz">Start a new build</button></div></div></section>`;
@@ -1224,7 +1265,7 @@ function renderPlay(){
       <div class="dash-row">
         <div class="dash-sec"><span class="lbl">Hazards</span>
           <div class="hz ${p.hz>=6?"hi":p.hz>=3?"mid":""}"><button class="cbtn" data-act="phz" data-i="${i}" data-d="-1" aria-label="Remove a hazard">−</button><b aria-live="polite">${p.hz}</b><button class="cbtn" data-act="phz" data-i="${i}" data-d="1" aria-label="Add a hazard">+</button></div></div>
-        <div class="dash-sec"><span class="lbl">Handling dice</span><span class="hand"><b>${hand}</b>${why.length?esc(why.join(", ")):"base"}</span></div>
+        <div class="dash-sec"><span class="lbl">Handling dice</span><span class="hand"><b>${hand}</b>${why.length?esc(why.join(", ")):"base"}</span><span class="ff"><b class="focus">Focus ${ffFaces(p.gear)[0]}</b> · <b class="fury">Fury ${ffFaces(p.gear)[1]}</b></span></div>
       </div>
 
       <div class="dash-sec"><div class="dash-row"><span class="lbl">Hull · ${left} of ${max} left</span><span class="note">Tap a box to mark damage</span></div>
@@ -1250,7 +1291,11 @@ function renderPlay(){
       <div><span class="lbl">${esc(team.name)}</span><div class="counter"><span class="lbl" style="margin-right:4px">Round</span><button class="cbtn" data-act="pround" data-d="-1" aria-label="Previous round">−</button><b>${play.round}</b><button class="cbtn" data-act="pround" data-d="1" aria-label="Next round">+</button></div></div>
       ${play.confirmReset?`<div class="tools"><span class="note">Reset all cars to full hull, gear 1, no hazards?</span><button class="btn small danger" data-act="presetok">Reset</button><button class="btn small" data-act="presetno">Keep</button></div>`:`<button class="btn small" data-act="preset">New game</button>`}
     </div>
-    <div class="play-cars ${T.cars.length===1?"one":""}">${cars}</div>
+    <div class="play-layout">
+      <div class="play-cars ${T.cars.length===1?"one":""}">${cars}</div>
+      <aside class="panel qr-side" aria-label="Quick rules"><h2>Quick rules</h2>${quickRulesHtml()}</aside>
+      <details class="panel qr-mobile" data-qr="1" ${QROPEN?"open":""}><summary><span class="lbl">Quick rules</span></summary>${quickRulesHtml()}</details>
+    </div>
   </section>`;
 }
 
@@ -1571,7 +1616,7 @@ function render(){
 }
 document.addEventListener("click",e=>{ if(e.target&&e.target.closest&&e.target.closest("#driftpad")) floorIt(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SHEET){ SHEET=null; render(); return; } if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.id==="driftpad"){ e.preventDefault(); floorIt(); } });
-document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; if(e.target&&e.target.dataset&&e.target.dataset.rbpanel) RBOPEN=e.target.open; },true);
+document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.qr) QROPEN=e.target.open; if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; if(e.target&&e.target.dataset&&e.target.dataset.rbpanel) RBOPEN=e.target.open; },true);
 function toTop(){ try{ window.scrollTo(0,0); }catch(e){} }
 function beginWizard(){
   const b=team.example?50:team.budget, cb=team.example?false:!!team.customBudget;
