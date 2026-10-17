@@ -317,7 +317,8 @@ details.glossary summary{cursor:pointer;font-weight:700}
   .play .hullgrid{gap:8px}
   .play .ab{width:40px;height:40px;font-size:18px}
   .play .ammo-row{font-size:17px}
-  .play .firebtn{min-height:48px;padding:8px 18px;font-size:16px}
+  .play .firebtn{min-height:52px;font-size:17px}
+  .play .firebtn svg{width:42px;height:42px}
   .play .play-top .counter b{font-size:34px}
   .play .ref{font-size:15px}
 }
@@ -353,8 +354,14 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .ab.used svg{width:62%;height:62%}
 .ab:active{transform:scale(.92)}
 .ab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.firebtn{all:unset;box-sizing:border-box;cursor:pointer;min-height:40px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--line);font-weight:700}
-.firebtn.on{background:var(--bad);border-color:var(--bad);color:var(--accent-ink)}
+.firebtn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:2px 6px 2px 0;font-weight:700;color:var(--muted)}
+.firebtn svg{width:34px;height:34px;flex:none}
+.firebtn .flame{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-linejoin:round}
+.firebtn .core{fill:none}
+.firebtn.on{color:var(--accent)}
+.firebtn.on .flame{fill:var(--accent);stroke:var(--accent)}
+.firebtn.on .core{fill:#ffd9b0}
+.firebtn:active svg{transform:scale(.92)}
 .firebtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .ref{font-size:13.5px;display:flex;flex-direction:column;gap:4px}
 .ref b{font-weight:600}
@@ -1159,7 +1166,7 @@ function renderPlay(){
 
       ${ammo.length?`<div class="dash-sec"><span class="lbl">Ammo</span>${ammo.map(a=>{ const used=(p.ammo[a.key]||0); return `<div class="ammo-row"><span>${esc(a.name)}</span><span class="ammo-boxes">${Array.from({length:a.n},(_,k)=>`<button class="ab ${a.kind==="u"?"teal":"orange"} ${k<used?"used":""}" data-act="pammo" data-i="${i}" data-key="${a.key}" data-k="${k}" aria-label="${esc(a.name)} ammo ${k+1}${k<used?", used":""}">${k<used?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>':""}</button>`).join("")}</span></div>`; }).join("")}</div>`:""}
 
-      <div class="dash-row"><button class="firebtn ${p.fire?"on":""}" data-act="pfire" data-i="${i}" aria-pressed="${p.fire}">${p.fire?"On Fire":"Not on fire"}</button>
+      <div class="dash-row"><button class="firebtn ${p.fire?"on":""}" data-act="pfire" data-i="${i}" aria-pressed="${p.fire}"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="flame" d="M12 2C12.8 5.2 11.2 7.2 9.6 8.9C8 10.6 6.5 12.4 6.5 15C6.5 18.6 9 21.5 12 21.5C15 21.5 17.5 18.6 17.5 15C17.5 12.6 16.4 10.9 15.2 9.6C15 11.2 14.2 12.3 13.1 12.7C13.6 9.2 13.1 5.4 12 2Z"/><path class="core" d="M12.2 13.2C12.7 14.9 11.2 15.9 11.2 17.4C11.2 18.6 11.9 19.5 12.9 19.5C14 19.5 14.8 18.6 14.8 17.3C14.8 15.9 13.7 14.5 12.2 13.2Z"/></svg>${p.fire?"On Fire":"Not on fire"}</button>
         <span class="note">Crew ${c.st.cr} · Armour ${c.st.ar} · Weight ${c.st.wt}</span></div>
       ${p.fire?`<p class="note">On Fire: 1 damage at the start of each activation, then roll a die. Beat your hazard count (${p.hz}) to put it out.</p>`:""}
 
