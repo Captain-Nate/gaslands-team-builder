@@ -267,6 +267,47 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .sum-flag.bad{color:var(--bad)}
 .sum-edit{all:unset;cursor:pointer;font-family:var(--cond);font-weight:600;font-size:13px;color:var(--accent)}
 .sum-edit:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+/* play mode */
+.play{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.play-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.counter{display:flex;align-items:center;gap:6px}
+.counter b{font-family:var(--cond);font-size:26px;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
+.cbtn{all:unset;box-sizing:border-box;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:22px;font-weight:700}
+.cbtn:hover{border-color:var(--ink)}
+.cbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.play-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:16px}
+.dash{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.dash.wrecked{border-color:var(--bad)}
+.dash-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.dash-h b{font-family:var(--display);font-weight:400;font-size:22px}
+.dash-sec{display:flex;flex-direction:column;gap:6px}
+.dash-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.gears{display:flex;gap:6px;flex-wrap:wrap}
+.gbtn{all:unset;box-sizing:border-box;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border:1.5px solid var(--line);border-radius:10px;font-family:var(--cond);font-weight:700;font-size:20px;background:var(--panel)}
+.gbtn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.gbtn:disabled{opacity:.3;cursor:not-allowed}
+.gbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hz{display:flex;align-items:center;gap:8px;border-radius:12px;padding:4px 6px;border:1.5px solid var(--line)}
+.hz b{font-family:var(--cond);font-size:28px;min-width:36px;text-align:center;font-variant-numeric:tabular-nums}
+.hz.mid{border-color:var(--warn);background:var(--warn-soft)}
+.hz.hi{border-color:var(--bad);background:var(--bad-soft)}
+.hand{font-family:var(--cond);font-size:16px}
+.hand b{font-size:28px;margin-right:4px}
+.hullgrid{display:flex;flex-wrap:wrap;gap:5px}
+.hb{all:unset;box-sizing:border-box;cursor:pointer;width:30px;height:30px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;font-family:var(--cond);font-size:12px;color:var(--muted)}
+.hb.hit{background:var(--bad);border-color:var(--bad);color:var(--accent-ink)}
+.hb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ammo-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ammo-boxes{display:flex;gap:6px}
+.ab{all:unset;box-sizing:border-box;cursor:pointer;width:30px;height:30px;border:2px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700}
+.ab.used{background:var(--muted);border-color:var(--muted);color:var(--panel)}
+.ab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.firebtn{all:unset;box-sizing:border-box;cursor:pointer;min-height:40px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--line);font-weight:700}
+.firebtn.on{background:var(--bad);border-color:var(--bad);color:var(--accent-ink)}
+.firebtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ref{font-size:13.5px;display:flex;flex-direction:column;gap:4px}
+.ref b{font-weight:600}
+details.refbox summary{cursor:pointer;font-family:var(--cond);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;color:var(--muted)}
 .wiz-nav{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:4}
 .wiz-count{font-family:var(--cond);color:var(--muted);font-variant-numeric:tabular-nums}
 .rev-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
@@ -286,6 +327,7 @@ details.glossary summary{cursor:pointer;font-weight:700}
   </header>
   <div id="home" hidden></div>
   <div id="wiz" hidden></div>
+  <div id="play" hidden></div>
   <div id="builder" hidden>
     <div class="board" id="board"></div>
     <main>
@@ -604,6 +646,11 @@ let team = fromHash || lsGet(LS_CUR) || exampleTeam();
 let view = fromHash ? "builder" : "home";
 let wiz = {step:0, n:1, nTouched:false, confirm:false};
 const BUD=[25,35,40,50,60,70,80,100];
+const LS_PLAY="gtb.play.v1";
+let play = lsGet(LS_PLAY) || {round:1,cars:[],sig:""};
+function teamSig(){ return team.name+"|"+team.cars.map(c=>c.type).join(","); }
+function ps(i){ if(play.sig!==teamSig()){ play={round:1,cars:[],sig:teamSig()}; } play.cars[i]=play.cars[i]||{dmg:0,gear:1,hz:0,fire:false,ammo:{}}; return play.cars[i]; }
+function savePlay(){ lsSet(LS_PLAY,play); }
 team.cars.forEach(c=>{ c.id=c.id||nid(); c.weapons=c.weapons||[]; c.upgrades=c.upgrades||[]; c.perks=c.perks||[]; c.weapons.forEach(w=>w.id=w.id||nid()); c.upgrades.forEach(u=>u.id=u.id||nid()); });
 
 /* ============================== RULES ENGINE ============================== */
@@ -858,8 +905,8 @@ function renderHome(){
       </div>
       ${wiz.confirm?`<div class="confirm" role="alert"><p>Starting over replaces <b>${esc(team.name)}</b>. Save it first?</p><div class="tools"><button class="btn small primary" data-act="startwizsave">Save it, then start</button><button class="btn small" data-act="startwizok">Start without saving</button><button class="btn small ghost" data-act="startwizno">Cancel</button></div></div>`:""}
     </div>
-    ${has?`<div class="panel"><span class="lbl">On screen now</span><div class="resume-row"><div><b>${esc(team.name)}</b><div class="note">${team.cars.length} vehicle${team.cars.length===1?"":"s"} · ${T.total} / ${team.budget} cans${team.example?" · example team":""}</div></div><button class="btn small" data-act="gobuilder">Continue</button></div></div>`:""}
-    ${saves.length?`<div class="panel"><span class="lbl">Saved on this device</span><div class="save-list" style="margin-top:6px">${saves.map((s,i)=>`<div class="save-row"><span title="${esc(s.name)}">${esc(s.name)} · ${s.total} c</span><button class="btn small" data-act="sload" data-i="${i}">Open</button></div>`).join("")}</div></div>`:""}
+    ${has?`<div class="panel"><span class="lbl">On screen now</span><div class="resume-row"><div><b>${esc(team.name)}</b><div class="note">${team.cars.length} vehicle${team.cars.length===1?"":"s"} · ${T.total} / ${team.budget} cans${team.example?" · example team":""}</div></div><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn small" data-act="save">${saves.some(x=>x.name===team.name)?"Update save":"Save"}</button><button class="btn small primary" data-act="gobuilder">Continue</button></span></div></div>`:""}
+    ${saves.length?`<div class="panel"><span class="lbl">Saved on this device</span><div class="save-list" style="margin-top:6px">${saves.map((s,i)=>`<div class="save-row"><span title="${esc(s.name)}">${esc(s.name)} · ${s.total} c</span><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${confirmDel===i?`<span class="note" style="align-self:center">Delete this build?</span><button class="btn small danger" data-act="sdelok" data-i="${i}">Delete</button><button class="btn small" data-act="sdelno">Keep</button>`:`<button class="btn small" data-act="sload" data-i="${i}">Open</button><button class="btn small danger" data-act="sdel" data-i="${i}" aria-label="Delete ${esc(s.name)}">Delete</button>`}</span></div>`).join("")}</div></div>`:""}
     <ol class="how">
       <li><b>Team</b>Cans and number of cars.</li>
       <li><b>Each car</b>Vehicle, driver, weapons, upgrades, perks.</li>
@@ -998,7 +1045,7 @@ function renderWizard(){
           <div class="note"><b>Slots:</b> ${c.slotsUsed} / ${c.st.sl} · Gear ${c.st.mg} · Hand ${c.st.hd} · Crew ${c.st.cr} · Wt ${c.st.wt} · Arm ${c.st.ar} · Hull ${c.st.hl}</div>
           ${issuesHtml(c.issues)}
           <div><button class="btn small" data-act="wizjump" data-step="${stepOf(i)}">Edit car ${i+1}</button></div></div>`; }).join("")}</div>
-      <div class="tools"><button class="btn primary" data-act="gobuilder">Open in the full builder</button><button class="btn" data-act="save">Save team</button><button class="btn" data-act="copylink">Copy link</button></div>`;
+      <div class="tools"><button class="btn primary" data-act="goplay">Play this team</button><button class="btn" data-act="gobuilder">Open in the full builder</button><button class="btn" data-act="save">Save team</button><button class="btn" data-act="copylink">Copy link</button></div>`;
   }
   const pct=Math.round(wiz.step/(steps.length-1)*100);
   const sum=buildSummary(T,steps,st);
@@ -1020,12 +1067,73 @@ function renderWizard(){
   </section>`;
 }
 
+function ammoItems(v){
+  const extra=v.perks.includes("Fireworks#5")?1:0;
+  const out=[];
+  v.weapons.forEach((w,wi)=>{ const d=W[w.k]; if(!d) return; const t=d.tags.find(x=>x.startsWith("Ammo")); if(t) out.push({key:"w"+wi,name:d.n,n:parseInt(t.split(" ")[1],10)+extra}); });
+  v.upgrades.forEach((u,ui)=>{ const d=U[u.k]; if(!d) return; const t=(d.tags||[]).find(x=>x.startsWith("Ammo")); if(t) out.push({key:"u"+ui,name:d.n,n:parseInt(t.split(" ")[1],10)+extra}); });
+  return out;
+}
+function renderPlay(){
+  const T=evalTeam(team);
+  if(!T.cars.length) return `<section class="play"><div class="hero"><h2 class="hero-h">No cars yet</h2><p class="hero-p">Build a team first, then come back here to track it during the game.</p><div class="hero-actions"><button class="btn primary big" data-act="startwiz">Start a new build</button></div></div></section>`;
+  const sp = team.sponsor && T.elig[team.sponsor] ? SPONSORS.find(x=>x[0]===team.sponsor) : null;
+  const cars=T.cars.map((c,i)=>{
+    const v=c.v, p=ps(i), max=c.st.hl, left=Math.max(0,max-p.dmg);
+    if(p.gear>c.st.mg) p.gear=c.st.mg;
+    let hand=c.st.hd; const why=[];
+    if(v.perks.includes("Speed#4")){ if(p.gear===5){hand+=1;why.push("Kiss My Asphalt +1");} if(p.gear>=6){hand+=2;why.push("Kiss My Asphalt +2");} }
+    if(v.perks.includes("Daring#4") && left<max/2){ hand+=1; why.push("Lock In +1"); }
+    if(sp && sp[0]==="Chivo" && p.hz===0){ hand+=1; why.push("Lowrider +1"); }
+    const ammo=ammoItems(v);
+    const wList=v.weapons.filter(w=>W[w.k]).map(w=>{ const d=W[w.k]; const turret=v.upgrades.some(u=>U[u.k]&&U[u.k].turret&&u.target===w.id); const dir=d.cat==="Dropped"?"rear":(d.tags.includes("360")||turret)?"360°":(w.f||"Front").toLowerCase(); return `<div><b>${esc(d.n)}</b> · ${esc(dir)} · ${esc(d.range)} · ${esc(d.dice)}${d.tags.length?" · "+esc(tagLine(d)):""}${d.note?` — ${esc(d.note)}`:""}</div>`; }).join("");
+    const pList=v.perks.filter(x=>PERK_BY_ID[x]).map(x=>`<div><b>${esc(PERK_BY_ID[x].n)}:</b> ${esc(PERK_BY_ID[x].note)}</div>`).join("");
+    const uList=v.upgrades.filter(u=>U[u.k]).map(u=>`<div><b>${esc(U[u.k].n)}${u.f?` (${esc(u.f.toLowerCase())})`:""}:</b> ${esc(U[u.k].note)}</div>`).join("");
+    return `<article class="dash ${left===0?"wrecked":""}">
+      <div class="dash-h"><b>${i+1}. ${esc(v.type)}</b><span class="note">${v.arch?esc(v.arch):"No archetype"}${v.driver?` · ${esc(v.driver)}`:""}</span>${left===0?`<span class="status-pill no">Wrecked</span>`:""}</div>
+
+      <div class="dash-sec"><span class="lbl">Gear (max ${c.st.mg})</span>
+        <div class="gears">${[1,2,3,4,5,6].map(g=>`<button class="gbtn ${g===p.gear?"on":""}" data-act="pgear" data-i="${i}" data-g="${g}" ${g>c.st.mg?"disabled":""} aria-pressed="${g===p.gear}" aria-label="Gear ${g}">${g}</button>`).join("")}</div></div>
+
+      <div class="dash-row">
+        <div class="dash-sec"><span class="lbl">Hazards</span>
+          <div class="hz ${p.hz>=6?"hi":p.hz>=3?"mid":""}"><button class="cbtn" data-act="phz" data-i="${i}" data-d="-1" aria-label="Remove a hazard">−</button><b aria-live="polite">${p.hz}</b><button class="cbtn" data-act="phz" data-i="${i}" data-d="1" aria-label="Add a hazard">+</button></div></div>
+        <div class="dash-sec"><span class="lbl">Handling dice</span><span class="hand"><b>${hand}</b>${why.length?esc(why.join(", ")):"base"}</span></div>
+      </div>
+
+      <div class="dash-sec"><div class="dash-row"><span class="lbl">Hull · ${left} of ${max} left</span><span class="note">Tap a box to mark damage</span></div>
+        <div class="hullgrid">${Array.from({length:max},(_,k)=>`<button class="hb ${k<p.dmg?"hit":""}" data-act="phull" data-i="${i}" data-k="${k}" aria-label="Hull box ${k+1}${k<p.dmg?", damaged":""}">${k+1}</button>`).join("")}</div></div>
+
+      ${ammo.length?`<div class="dash-sec"><span class="lbl">Ammo</span>${ammo.map(a=>{ const used=(p.ammo[a.key]||0); return `<div class="ammo-row"><span>${esc(a.name)}</span><span class="ammo-boxes">${Array.from({length:a.n},(_,k)=>`<button class="ab ${k<used?"used":""}" data-act="pammo" data-i="${i}" data-key="${a.key}" data-k="${k}" aria-label="${esc(a.name)} ammo ${k+1}${k<used?", used":""}">${k<used?"✕":""}</button>`).join("")}</span></div>`; }).join("")}</div>`:""}
+
+      <div class="dash-row"><button class="firebtn ${p.fire?"on":""}" data-act="pfire" data-i="${i}" aria-pressed="${p.fire}">${p.fire?"On Fire":"Not on fire"}</button>
+        <span class="note">Crew ${c.st.cr} · Armour ${c.st.ar} · Weight ${c.st.wt}</span></div>
+      ${p.fire?`<p class="note">On Fire: 1 damage at the start of each activation, then roll a die. Beat your hazard count (${p.hz}) to put it out.</p>`:""}
+
+      <details class="refbox"><summary>Quick reference</summary><div class="ref" style="margin-top:6px">
+        ${v.arch?`<div><b>${esc(v.arch)}:</b> ${esc(ARCH[v.arch][1])}</div>`:""}
+        ${wList}${uList}${pList}
+        ${sp?`<div><b>${esc(sp[2])} (${esc(sp[0])}):</b> ${esc(sp[3])}</div>`:""}
+        ${c.rules.map(r=>`<div><b>${esc(r)}:</b> ${esc(VEHICLE_RULES[r]||"")}</div>`).join("")}
+      </div></details>
+    </article>`;
+  }).join("");
+  return `<section class="play">
+    <div class="play-top">
+      <div><span class="lbl">${esc(team.name)}</span><div class="counter"><span class="lbl" style="margin-right:4px">Round</span><button class="cbtn" data-act="pround" data-d="-1" aria-label="Previous round">−</button><b>${play.round}</b><button class="cbtn" data-act="pround" data-d="1" aria-label="Next round">+</button></div></div>
+      ${play.confirmReset?`<div class="tools"><span class="note">Reset all cars to full hull, gear 1, no hazards?</span><button class="btn small danger" data-act="presetok">Reset</button><button class="btn small" data-act="presetno">Keep</button></div>`:`<button class="btn small" data-act="preset">New game</button>`}
+    </div>
+    <div class="play-cars">${cars}</div>
+  </section>`;
+}
+
 function render(){
+  $("#play").hidden=view!=="play"; $("#play").innerHTML= view==="play"? renderPlay():"";
   $("#home").hidden=view!=="home"; $("#wiz").hidden=view!=="wiz"; $("#builder").hidden=view!=="builder";
   $("#home").innerHTML= view==="home"? renderHome():"";
   $("#wiz").innerHTML= view==="wiz"? renderWizard():"";
   if(view==="builder") renderBuilder(); else { $("#board").innerHTML=""; $("#cars").innerHTML=""; $("#aside").innerHTML=""; }
-  $("#nav").innerHTML=`<button class="btn small" data-act="gohome" ${view==="home"?'aria-current="page"':""}>Home</button><button class="btn small" data-act="startwiz" ${view==="wiz"?'aria-current="page"':""}>Guided build</button><button class="btn small" data-act="gobuilder" ${view==="builder"?'aria-current="page"':""}>Builder</button>`;
+  $("#nav").innerHTML=`<button class="btn small" data-act="gohome" ${view==="home"?'aria-current="page"':""}>Home</button><button class="btn small" data-act="startwiz" ${view==="wiz"?'aria-current="page"':""}>Guided build</button><button class="btn small" data-act="gobuilder" ${view==="builder"?'aria-current="page"':""}>Builder</button><button class="btn small" data-act="goplay" ${view==="play"?'aria-current="page"':""}>Play</button>`;
   persist();
 }
 document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; },true);
@@ -1086,6 +1194,16 @@ document.addEventListener("click",e=>{
     case "new": team=blankTeam(); break;
     case "example": team=exampleTeam(); break;
     case "copy": { const code=$("#code").value; const done=()=>toast("Code copied"); try{ navigator.clipboard.writeText(code).then(done,()=>{ $("#code").select(); toast("Select-all done: copy it manually"); }); }catch(err){ $("#code").select(); toast("Select-all done: copy it manually"); } } return;
+    case "goplay": view="play"; toTop(); render(); return;
+    case "pround": play.round=Math.max(1,play.round+(+el.dataset.d)); savePlay(); render(); return;
+    case "preset": play.confirmReset=true; render(); return;
+    case "presetno": play.confirmReset=false; render(); return;
+    case "presetok": play={round:1,cars:[],sig:teamSig()}; savePlay(); toast("New game: all cars reset"); render(); return;
+    case "pgear": { const q=ps(+el.dataset.i); q.gear=+el.dataset.g; savePlay(); render(); } return;
+    case "phz": { const q=ps(+el.dataset.i); q.hz=Math.max(0,Math.min(20,q.hz+(+el.dataset.d))); savePlay(); render(); } return;
+    case "phull": { const q=ps(+el.dataset.i), k=+el.dataset.k; q.dmg = (k===q.dmg-1) ? k : k+1; savePlay(); render(); } return;
+    case "pammo": { const q=ps(+el.dataset.i), k=+el.dataset.k, key=el.dataset.key; const u=q.ammo[key]||0; q.ammo[key] = (k===u-1) ? k : k+1; savePlay(); render(); } return;
+    case "pfire": { const q=ps(+el.dataset.i); q.fire=!q.fire; savePlay(); render(); } return;
     case "gohome": view="home"; wiz.confirm=false; toTop(); render(); return;
     case "gobuilder": view="builder"; toTop(); render(); return;
     case "startwiz": if(team.cars.length && !team.example){ view="home"; wiz.confirm=true; toTop(); render(); return; } beginWizard(); render(); return;
