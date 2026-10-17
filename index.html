@@ -238,6 +238,35 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .ar-p{font-family:var(--cond);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
 .ar-why{grid-column:1 / -1;font-size:12.5px;color:var(--bad)}
 .ar-why.warn{color:var(--warn)}
+.wiz-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.wiz-main{display:flex;flex-direction:column;gap:12px;min-width:0}
+.wiz-side{position:sticky;top:calc(12px + env(safe-area-inset-top,0px));max-height:calc(100vh - 24px);overflow:auto}
+.wiz-sum-mobile{display:none}
+@media (max-width:900px){.wiz-grid{grid-template-columns:minmax(0,1fr)}.wiz-side{display:none}.wiz-sum-mobile{display:block}}
+.wiz-sum-mobile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.wiz-sum-mobile summary{cursor:pointer;font-weight:700;display:flex;justify-content:space-between;gap:8px;list-style:none}
+.wiz-sum-mobile summary::-webkit-details-marker{display:none}
+.wiz-sum-mobile summary::after{content:"Show";font-family:var(--cond);font-weight:600;color:var(--accent)}
+.wiz-sum-mobile[open] summary::after{content:"Hide"}
+.sum{display:flex;flex-direction:column;gap:10px;font-size:14px}
+.sum-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:var(--cond);font-variant-numeric:tabular-nums}
+.sum-top b{font-size:20px}
+.sum-car{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:5px;background:var(--panel)}
+.sum-car.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.sum-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sum-h b{font-size:15px}
+.sum-h span{font-family:var(--cond);font-weight:700;white-space:nowrap}
+.sum-stats{font-family:var(--cond);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sum-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:6px;font-size:13.5px;line-height:1.35}
+.sum-row .k{font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:1px}
+.sum-row ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2px}
+.sum-row li{display:flex;justify-content:space-between;gap:6px}
+.sum-row li span:last-child{font-family:var(--cond);color:var(--muted);white-space:nowrap}
+.sum-row .none{color:var(--muted)}
+.sum-flag{font-size:12.5px;color:var(--warn)}
+.sum-flag.bad{color:var(--bad)}
+.sum-edit{all:unset;cursor:pointer;font-family:var(--cond);font-weight:600;font-size:13px;color:var(--accent)}
+.sum-edit:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
 .wiz-nav{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:4}
 .wiz-count{font-family:var(--cond);color:var(--muted);font-variant-numeric:tabular-nums}
 .rev-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
@@ -874,6 +903,40 @@ function addRows(v,c,isW){
       return `<button class="addrow" data-act="${isW?"wizaddw":"wizaddu"}" data-car="${v.id}" data-k="${esc(d.n)}" ${why?"disabled":""}><span><b>${esc(d.n)}</b><small>${esc(detail)}</small></span><span class="ar-p">${cost} c · ${slotTxt}</span>${why?`<span class="ar-why">${esc(why)}</span>`:warn?`<span class="ar-why warn">${esc(warn)}</span>`:""}</button>`;
     }).join("")}</div>`).join("");
 }
+function buildSummary(T,steps,st){
+  const left=team.budget-T.total;
+  const stepOf=i=>steps.findIndex(x=>x.k==="veh"&&x.i===i);
+  const li=(name,meta)=>`<li><span>${esc(name)}</span><span>${esc(meta)}</span></li>`;
+  const row=(k,items)=>`<div class="sum-row"><span class="k">${k}</span>${items.length?`<ul>${items.join("")}</ul>`:`<span class="none">none yet</span>`}</div>`;
+  const cars=[];
+  for(let i=0;i<wiz.n;i++){
+    const c=T.cars[i];
+    if(!c){ cars.push(`<div class="sum-car ${st.i===i?"cur":""}"><div class="sum-h"><b>Car ${i+1}</b><span class="note">no vehicle yet</span></div></div>`); continue; }
+    const v=c.v;
+    const wpns=v.weapons.filter(w=>W[w.k]).map(w=>{ const d=W[w.k]; const turret=v.upgrades.some(u=>U[u.k]&&U[u.k].turret&&u.target===w.id); const dir=d.cat==="Dropped"?"rear":(d.tags.includes("360")||turret)?"360°":(w.f||"Front").toLowerCase(); return li(`${d.n} (${dir})`,`${d.dice} · ${d.cost} c`); });
+    const upgs=v.upgrades.filter(u=>U[u.k]).map(u=>{ const d=U[u.k]; const tw=d.turret?v.weapons.find(w=>w.id===u.target):null; const price=d.turret?2+(tw?W[tw.k].cost:0):d.cost; return li(`${d.n}${u.f?` (${u.f.toLowerCase()})`:""}`,`${price} c`); });
+    const perks=v.perks.filter(p=>PERK_BY_ID[p]).map(p=>li(PERK_BY_ID[p].n,`${PERK_BY_ID[p].cost} c`));
+    const drv=v.arch?`${v.arch}${v.driver?` · ${v.driver}`:""}`:(v.driver||"");
+    const nW=v.weapons.length, crew=c.st.cr;
+    const flags=[];
+    if(nW>crew) flags.push([`${nW} weapons but ${crew} crew: fires ${crew} per turn`,""]);
+    if(c.slotsUsed>c.st.sl) flags.push([`${c.slotsUsed - c.st.sl} build slot${c.slotsUsed-c.st.sl===1?"":"s"} over`,"bad"]);
+    c.issues.filter(x=>x[1]!=="w"&&!/build slots/.test(x[0])).forEach(x=>flags.push([x[0],"bad"]));
+    cars.push(`<div class="sum-car ${st.i===i?"cur":""}">
+      <div class="sum-h"><b>${i+1}. ${esc(v.type)}</b><span>${c.cost} c</span></div>
+      <div class="sum-stats">Gear ${c.st.mg} · Hand ${c.st.hd} · Crew ${crew} · Wt ${c.st.wt} · Arm ${c.st.ar} · Hull ${c.st.hl} · Slots ${c.slotsUsed}/${c.st.sl}</div>
+      <div class="sum-row"><span class="k">Driver</span>${drv?`<span>${esc(drv)}</span>`:`<span class="none">none yet</span>`}</div>
+      ${row("Weapons",wpns)}${row("Upgrades",upgs)}${row("Perks",perks)}
+      ${flags.map(f=>`<div class="sum-flag ${f[1]}">${esc(f[0])}</div>`).join("")}
+      ${st.k!=="setup"&&st.i!==i?`<div><button class="sum-edit" data-act="wizjump" data-step="${stepOf(i)}">Edit car ${i+1}</button></div>`:""}
+    </div>`);
+  }
+  return `<div class="sum">
+    <div class="sum-top"><span><b>${T.total}</b> / ${team.budget} cans</span><span class="${left<0?"neg":""}" style="color:${left<0?"var(--bad)":"var(--muted)"}">${left<0?`${-left} over`:`${left} left`}</span></div>
+    ${cars.join("")}
+    ${team.sponsor?`<div class="sum-row"><span class="k">Sponsor</span><span>${esc(team.sponsor)}${T.elig[team.sponsor]?"":" (not met yet)"}</span></div>`:""}
+  </div>`;
+}
 function renderWizard(){
   const steps=wizSteps(); if(wiz.step>=steps.length) wiz.step=steps.length-1; if(wiz.step<0) wiz.step=0;
   const st=steps[wiz.step];
@@ -938,12 +1001,17 @@ function renderWizard(){
       <div class="tools"><button class="btn primary" data-act="gobuilder">Open in the full builder</button><button class="btn" data-act="save">Save team</button><button class="btn" data-act="copylink">Copy link</button></div>`;
   }
   const pct=Math.round(wiz.step/(steps.length-1)*100);
-  return `<section class="wiz">
+  const sum=buildSummary(T,steps,st);
+  const showSum=st.k!=="review";
+  return `<section class="wiz" style="max-width:${showSum?"1240px":"900px"}">
     <div class="wiz-head">
       <div class="wiz-top"><span class="wiz-title">${esc(st.t)}</span><span class="status-pill ${left<0?"no":"ok"}">${left<0?`${-left} cans over`:`${left} cans left`}</span></div>
       <div class="bar"><i style="width:${pct}%"></i></div>
     </div>
-    <div class="wiz-body">${body}</div>
+    ${showSum?`<div class="wiz-grid"><div class="wiz-main">
+      <details class="wiz-sum-mobile" ${wiz.sumOpen?"open":""} data-sum="1"><summary><span>Your build · ${T.total} / ${team.budget} cans</span></summary>${sum}</details>
+      <div class="wiz-body">${body}</div>
+    </div><aside class="wiz-side panel" aria-label="Your build"><h2>Your build</h2>${sum}</aside></div>`:`<div class="wiz-body">${body}</div>`}
     <div class="wiz-nav">
       <button class="btn" data-act="wizback" ${wiz.step===0?"disabled":""}>Back</button>
       <span class="wiz-count">Step ${wiz.step+1} of ${steps.length}</span>
@@ -960,6 +1028,7 @@ function render(){
   $("#nav").innerHTML=`<button class="btn small" data-act="gohome" ${view==="home"?'aria-current="page"':""}>Home</button><button class="btn small" data-act="startwiz" ${view==="wiz"?'aria-current="page"':""}>Guided build</button><button class="btn small" data-act="gobuilder" ${view==="builder"?'aria-current="page"':""}>Builder</button>`;
   persist();
 }
+document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; },true);
 function toTop(){ try{ window.scrollTo(0,0); }catch(e){} }
 function beginWizard(){
   const b=team.example?50:team.budget, cb=team.example?false:!!team.customBudget;
