@@ -421,6 +421,8 @@ details.refbox summary{cursor:pointer;font-family:var(--cond);font-weight:700;le
 .sheet-meta .v{font-weight:700}
 .sheet-sec{display:flex;flex-direction:column;gap:6px}
 .sheet-sec p{margin:0}
+.sheet .ammo-boxes{display:flex;gap:8px;flex-wrap:wrap}
+.sheet .ab{width:40px;height:40px}
 .verb{background:var(--panel-2);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
 .verb .verb-head{font-weight:700}
 .verb-src{font-size:12.5px;color:var(--muted)}
@@ -594,7 +596,7 @@ addU("Rare",[
   ["Experimental Teleporter",1,3,"Start of activation: guess a straight-template distance to a coin. Right = teleport there; wrong = an opponent places you.",{tags:["Ammo 1","Electrical"]}],
   ["Exploding Ram",0,2,"Front collision: +6 smash dice, but take 1 damage per smash die rolling 1–2.",{tags:["Ammo 1"]}],
   ["Grabber Arm",2,1,"Once per activation, take a hazard to grab a vehicle you'd shunt and put it anywhere within Short."],
-  ["Improvised Sludge Thrower",2,1,"Place its dropped-weapon templates anywhere within Medium, any direction."],
+  ["Improvised Sludge Thrower",2,1,"Its drop templates can go anywhere in Medium range, facing any way."],
   ["Magnetic Clamps",0,2,"Can only be shunted by an aggressor dealing 3+ damage."],
   ["Rubber Bumpers",0,2,"Always shunts its victim, unless the victim is 2+ Weight heavier or Hefty and heavier."],
   ["Turret Mount",1,2,"One shooting weapon becomes 360°. Costs 2 + that weapon's cost.",{turret:true}],
@@ -1277,8 +1279,8 @@ function renderPlay(){
       <div class="dash-sec"><span class="lbl">${hasRB()?"Loadout · tap for the rules":"Loadout"}</span>${i===0?`<div class="chip-key" aria-label="Colour key"><span><i class="sw a"></i>Driver</span><span><i class="sw w"></i>Weapon</span><span><i class="sw u"></i>Upgrade</span><span><i class="sw p"></i>Vehicle, perk</span></div>`:""}<div class="chips">
         ${chip("V:"+v.type,v.type,"")}
         ${v.arch?chip("A:"+v.arch,v.arch,"a"):""}
-        ${v.weapons.filter(w=>W[w.k]).map(w=>chip("W:"+w.k,w.k,"w")).join("")}
-        ${v.upgrades.filter(u=>U[u.k]).map(u=>chip("U:"+u.k,u.k,"u")).join("")}
+        ${v.weapons.map((w,wi)=>W[w.k]?chip("W:"+w.k,w.k,"w",{i,slot:"w"+wi}):"").join("")}
+        ${v.upgrades.map((u,ui)=>U[u.k]?chip("U:"+u.k,u.k,"u",{i,slot:"u"+ui}):"").join("")}
         ${v.perks.filter(x=>PERK_BY_ID[x]).map(x=>chip("P:"+x,PERK_BY_ID[x].n,"")).join("")}
       </div>${hasRB()?"":`<p class="note">Own the rulebook? Load your PDFs on the home page to tap any of these for its rules.</p>`}</div>
     </article>`;
@@ -1305,7 +1307,7 @@ const REF_PAGES={"V:Buggy":2,"V:Hot Rod":2,"V:Monster Truck":2,"V:Muscle Car":3,
 const REF_DOC=k=>/^[VWURG]:/.test(k)?"Vehicles chapter (v5.3)":/^[AP]:/.test(k)?"Drivers & Perks chapters (v5.2)":"Sponsors chapter (v5.2)";
 const GLOSS_KEY=t=>t==="360"?"G:360":t.startsWith("Ammo")?"G:Ammo":t.startsWith("Ignores Armour")?"G:Ignores Armour":["Blast","Electrical","Fire","Indirect","Rattle","Splash","Tactical"].includes(t)?"G:"+t:null;
 const LS_RB="gtb.rulebook.v1";
-let RB=lsGet(LS_RB); let RBSTATUS={}; let RBCONFIRM=false; let SHEET=null; let RBOPEN=false;
+let RB=lsGet(LS_RB); let RBSTATUS={}; let RBCONFIRM=false; let SHEET=null; let SHEETCTX=null; let RBOPEN=false;
 const hasRB=()=>!!(RB&&RB.entries&&Object.keys(RB.entries).length);
 // Page -> ordered text lines, reading two-column blocks left column first.
 async function rbPageLines(page){
@@ -1487,7 +1489,7 @@ function rbChecklist(){
     const detail=f?[f.file, f.version?"v"+f.version:"", f.pages?f.pages+" pages":"", f.at?"loaded "+fmtDate(f.at):""].filter(Boolean).join(" · "):(have?"loaded":"not loaded yet");
     return `<li class="${have?"have":"miss"}"><span class="rb-mark" aria-hidden="true">${have?"✓":"–"}</span><span><b>${esc(lbl)}</b><small>${esc(detail)}</small></span></li>`; }).join("")}</ul>`;
 }
-function chip(key,label,cls){ return hasRB()?`<button class="chip-btn ${cls||""}" data-act="ref" data-ref="${esc(key)}">${esc(label)}</button>`:`<span class="chip-btn locked ${cls||""}">${esc(label)}</span>`; }
+function chip(key,label,cls,ctx){ return hasRB()?`<button class="chip-btn ${cls||""}" data-act="ref" data-ref="${esc(key)}"${ctx?` data-i="${ctx.i}" data-slot="${ctx.slot}"`:""}>${esc(label)}</button>`:`<span class="chip-btn locked ${cls||""}">${esc(label)}</span>`; }
 function infoBtn(key,name){ return hasRB()?`<button class="info-btn" data-act="ref" data-ref="${esc(key)}" aria-label="Rules for ${esc(name)}">i</button>`:""; }
 function nameBtn(key,name){ return hasRB()?`<button class="name-btn" data-act="ref" data-ref="${esc(key)}">${esc(name)}</button>`:esc(name); }
 function refMeta(key){
@@ -1511,13 +1513,27 @@ function verbBlock(key){
   if(e) return `<div class="verb">${fmtVerb(e.text)}</div><span class="verb-src">From your PDF · ${esc(where)}${e.row?" · table row":""}</span>`;
   return `<p class="note">Not found in the chapters you loaded. It's in the ${esc(where)}.</p>`;
 }
+function sheetAmmo(info){
+  const tag=(info.tags||[]).find(t=>t.startsWith("Ammo")); if(!tag) return "";
+  let n=parseInt(tag.split(" ")[1],10);
+  if(SHEETCTX&&view==="play"&&team.cars[SHEETCTX.i]){
+    const i=SHEETCTX.i, a=ammoItems(team.cars[i]).find(x=>x.key===SHEETCTX.slot);
+    if(a){ const used=Math.min(a.n,ps(i).ammo[a.key]||0);
+      info.meta.push(["Ammo",`${a.n-used} of ${a.n} left`]);
+      return `<div class="sheet-sec"><span class="lbl">Ammo · tap to tick off</span><span class="ammo-boxes">${Array.from({length:a.n},(_,k)=>`<button class="ab ${a.kind==="u"?"teal":"orange"} ${k<used?"used":""}" data-act="pammo" data-i="${i}" data-key="${a.key}" data-k="${k}" aria-label="${esc(a.name)} ammo ${k+1}${k<used?", used":""}">${k<used?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>':""}</button>`).join("")}</span></div>`; }
+  }
+  info.meta.push(["Ammo",n===1?"1 box":`${n} boxes`]);
+  return "";
+}
 function sheetHtml(key){
   const info=refMeta(key);
+  const ammoSec=sheetAmmo(info);
   const tagRules=(info.tags||[]).map(tg=>[tg,GLOSS_KEY(tg)]).filter(x=>x[1]&&RB.entries[x[1]]);
   return `<div class="sheet-backdrop" data-act="refclose"></div>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
     <div class="sheet-h"><div><span class="lbl">${esc(info.kind)}</span><h2 id="sheet-title">${esc(info.title)}</h2></div><button class="x big" data-act="refclose" aria-label="Close">×</button></div>
     ${info.meta.length?`<div class="sheet-meta">${info.meta.map(m=>`<div><div class="k">${esc(m[0])}</div><div class="v">${esc(m[1])}</div></div>`).join("")}</div>`:""}
+    ${ammoSec}
     <div class="sheet-sec">${verbBlock(key)}</div>
     ${(info.rules||[]).map(r=>`<div class="sheet-sec">${verbBlock("R:"+r)}</div>`).join("")}
     ${tagRules.map(([tg,k])=>`<div class="sheet-sec">${verbBlock(k)}</div>`).join("")}
@@ -1612,7 +1628,7 @@ function render(){
   persist();
 }
 document.addEventListener("click",e=>{ if(e.target&&e.target.closest&&e.target.closest("#driftpad")) floorIt(); });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SHEET){ SHEET=null; render(); return; } if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.id==="driftpad"){ e.preventDefault(); floorIt(); } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SHEET){ SHEET=null; SHEETCTX=null; render(); return; } if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.id==="driftpad"){ e.preventDefault(); floorIt(); } });
 document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.qr) QROPEN=e.target.open; if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; if(e.target&&e.target.dataset&&e.target.dataset.rbpanel) RBOPEN=e.target.open; },true);
 function toTop(){ try{ window.scrollTo(0,0); }catch(e){} }
 function beginWizard(){
@@ -1673,8 +1689,8 @@ document.addEventListener("click",e=>{
     case "example": team=exampleTeam(); break;
     case "copy": { const code=$("#code").value; const done=()=>toast("Code copied"); try{ navigator.clipboard.writeText(code).then(done,()=>{ $("#code").select(); toast("Select-all done: copy it manually"); }); }catch(err){ $("#code").select(); toast("Select-all done: copy it manually"); } } return;
     case "goplay": view="play"; toTop(); render(); return;
-    case "ref": e.preventDefault(); if(!hasRB()) return; SHEET=el.dataset.ref; render(); try{ const xb=document.querySelector(".sheet .x"); if(xb) xb.focus(); }catch(err){} return;
-    case "refclose": SHEET=null; render(); return;
+    case "ref": e.preventDefault(); if(!hasRB()) return; SHEET=el.dataset.ref; SHEETCTX=(el.dataset.slot!=null&&el.dataset.i!=null)?{i:+el.dataset.i,slot:el.dataset.slot}:null; render(); try{ const xb=document.querySelector(".sheet .x"); if(xb) xb.focus(); }catch(err){} return;
+    case "refclose": SHEET=null; SHEETCTX=null; render(); return;
     case "rbclear": RBCONFIRM=true; render(); return;
     case "rbclearno": RBCONFIRM=false; render(); return;
     case "rbclearok": RB=null; RBCONFIRM=false; SHEET=null; RBSTATUS={ok:"Rule text removed from this device."}; try{ localStorage.removeItem(LS_RB); }catch(err){} render(); return;
