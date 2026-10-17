@@ -132,9 +132,6 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:
 .stat .k{font-family:var(--cond);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .stat .v{font-family:var(--cond);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.1}
 .stat .v.up{color:var(--good)} .stat .v.down{color:var(--bad)}
-.gear-track{display:flex;gap:3px;justify-content:center;margin-top:3px}
-.gear-track span{width:7px;height:7px;border-radius:2px;background:var(--line)}
-.gear-track span.on{background:var(--accent)}
 .hull{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
 .hull span{width:13px;height:13px;border:1.5px solid var(--muted);border-radius:3px}
 .meta-row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px}
@@ -891,7 +888,7 @@ function statCell(k,label,val,base,extra){ const cls= val>base?"up":val<base?"do
 
 function renderCar(c, i, T){
   const v=c.v, st=c.st, b=c.base;
-  const gear=`<div class="gear-track" aria-hidden="true">${[1,2,3,4,5,6].map(g=>`<span class="${g<=st.mg?"on":""}"></span>`).join("")}</div>`;
+  const gear="";
   const slots=Array.from({length:Math.max(st.sl,c.slotsUsed)},(_,k)=>`<span class="${k<c.slotsUsed?(k>=st.sl?"over":"used"):""}"></span>`).join("");
   const sponsorRule = T.sponsor && T.elig[T.sponsor] ? SPONSORS.find(s=>s[0]===T.sponsor) : null;
   const ruleChips=c.rules.map(r=>`<span class="rule" title="${esc(VEHICLE_RULES[r]||"")}">${esc(r)}</span>`).join("")
@@ -1255,7 +1252,7 @@ function renderPlay(){
     return `<article class="dash ${left===0?"wrecked":""}">
       <div class="dash-h"><b>${i+1}. ${esc(v.type)}</b><span class="note">${v.driver?`<span class="drv-name">${esc(v.driver)}</span> · `:""}${v.arch?esc(v.arch):"No archetype"}</span>${left===0?`<span class="status-pill no">Wrecked</span>`:""}</div>
       <div class="stats play-stats">
-        ${statCell("mg","Gear",c.st.mg,c.base.mg,`<div class="gear-track" aria-hidden="true">${[1,2,3,4,5,6].map(g=>`<span class="${g<=c.st.mg?"on":""}"></span>`).join("")}</div>`)}${statCell("hd","Handling",c.st.hd,c.base.hd)}${statCell("cr","Crew",c.st.cr,c.base.cr)}${statCell("wt","Weight",c.st.wt,c.base.wt)}${statCell("ar","Armour",c.st.ar,c.base.ar)}${statCell("hl","Hull",c.st.hl,c.base.hl)}
+        ${statCell("mg","Gear",c.st.mg,c.base.mg)}${statCell("hd","Handling",c.st.hd,c.base.hd)}${statCell("cr","Crew",c.st.cr,c.base.cr)}${statCell("wt","Weight",c.st.wt,c.base.wt)}${statCell("ar","Armour",c.st.ar,c.base.ar)}${statCell("hl","Hull",c.st.hl,c.base.hl)}
       </div>
       ${(c.rules.length||sp)?`<div class="chips">${c.rules.map(r=>chip("R:"+r,r,"")).join("")}${sp?chip("S:"+sp[0],sp[2]+" ("+sp[0]+")","s"):""}</div>`:""}
 
