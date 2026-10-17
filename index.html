@@ -105,6 +105,7 @@ button{cursor:pointer}
 .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .btn.ghost{background:transparent}
 .btn.small{min-height:32px;padding:4px 10px;font-size:14px}
+a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:center}
 .btn.danger{color:var(--bad)}
 
 /* issues */
@@ -364,6 +365,65 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .ref{font-size:13.5px;display:flex;flex-direction:column;gap:4px}
 .ref b{font-weight:600}
 details.refbox summary{cursor:pointer;font-family:var(--cond);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;color:var(--muted)}
+/* rules cards (only for people who loaded their own rulebook PDFs) */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-btn{all:unset;box-sizing:border-box;cursor:pointer;font-weight:600;font-size:14px;padding:6px 11px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel)}
+.chip-btn:hover{border-color:var(--ink)}
+.chip-btn.locked{cursor:default}
+.chip-btn.locked:hover{border-color:var(--line)}
+.chip-btn.w,.chip-btn.w.locked:hover{border-color:var(--accent);color:var(--accent)}
+.chip-btn.u,.chip-btn.u.locked:hover{border-color:var(--teal);color:var(--teal)}
+.chip-btn.a,.chip-btn.a.locked:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip-btn.s{border-style:dashed}
+.chip-key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.chip-key span{display:inline-flex;align-items:center;gap:6px}
+.chip-key .sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--line);box-sizing:border-box}
+.chip-key .sw.a{background:var(--accent);border-color:var(--accent)}
+.chip-key .sw.w{border-color:var(--accent)}
+.chip-key .sw.u{border-color:var(--teal)}
+.chip-key .sw.s{border-style:dashed;border-color:var(--muted)}
+.chip-btn:focus-visible,.name-btn:focus-visible,.info-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.name-btn{all:unset;cursor:pointer;font-weight:600;border-bottom:1.5px dotted var(--muted)}
+.name-btn:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.info-btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);font:700 12px/1 var(--body);margin-left:4px;vertical-align:1px}
+.info-btn:hover{border-color:var(--accent);color:var(--accent)}
+.sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30}
+.sheet{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,calc(100vw - 32px));max-height:min(86vh,900px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px 20px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:640px){.sheet{left:0;right:0;top:auto;bottom:0;transform:none;width:auto;max-height:88vh;border-radius:16px 16px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+.sheet-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sheet-h h2{font-family:var(--display);font-weight:400;font-size:26px;line-height:1.1;margin-top:2px}
+.sheet .x.big{all:unset;cursor:pointer;font-size:30px;line-height:1;padding:2px 8px;border-radius:8px;color:var(--muted)}
+.sheet .x.big:hover{color:var(--ink);background:var(--panel-2)}
+.sheet-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.sheet-meta div{background:var(--panel-2);border-radius:8px;padding:6px 10px}
+.sheet-meta .k{font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.sheet-meta .v{font-weight:700}
+.sheet-sec{display:flex;flex-direction:column;gap:6px}
+.sheet-sec p{margin:0}
+.verb{background:var(--panel-2);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
+.verb .verb-head{font-weight:700}
+.verb-src{font-size:12.5px;color:var(--muted)}
+details.rb-panel summary{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;list-style:none;flex-wrap:wrap}
+details.rb-panel summary::-webkit-details-marker{display:none}
+details.rb-panel summary::after{content:"Show";font-family:var(--cond);font-weight:600;font-size:14px;color:var(--accent);margin-left:4px}
+details.rb-panel[open] summary::after{content:"Hide"}
+details.rb-panel summary .status-pill{margin-left:auto}
+details.rb-panel summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+.rb-body{margin-top:8px}
+.rb-list{list-style:none;margin:8px 0 2px;padding:0;display:flex;flex-direction:column;gap:6px}
+.rb-list li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:center;background:var(--panel-2);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px}
+.rb-list li.have{background:var(--good-soft);border-color:var(--good)}
+.rb-list li.have b{color:var(--good)}
+.rb-list li small{display:block;color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.rb-mark{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;font-weight:700;font-size:13px}
+.rb-list .have .rb-mark{background:var(--good);color:var(--panel)}
+.rb-list .miss .rb-mark{border:1.5px solid var(--muted);color:var(--muted)}
+.rb-list .miss b{color:var(--muted)}
+.rb-status{font-size:14px;border-radius:8px;padding:6px 10px}
+.rb-status.ok{background:var(--panel-2);color:var(--muted)} .rb-status.warn{background:var(--warn-soft);color:var(--warn)} .rb-status.err{background:var(--bad-soft);color:var(--bad)} .rb-status.busy{background:var(--warn-soft);color:var(--warn)}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
+.file-btn{position:relative;cursor:pointer;display:inline-flex;align-items:center}
+.file-btn:focus-within{outline:2px solid var(--accent);outline-offset:2px}
 .wiz-nav{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:4}
 .wiz-count{font-family:var(--cond);color:var(--muted);font-variant-numeric:tabular-nums}
 .rev-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
@@ -394,6 +454,7 @@ details.refbox summary{cursor:pointer;font-family:var(--cond);font-weight:700;le
   <p class="foot">Unofficial fan tool. Rule summaries are short paraphrases for quick reference; the PDF chapters are the source of truth. Gaslands is © Mike Hutchinson / Planet Smasher Games.</p>
 </div>
 <div class="toast" id="toast" hidden></div>
+<div id="sheet"></div>
 
 <script>
 /* ============================== DATA ==============================
@@ -426,7 +487,7 @@ const VEHICLE_RULES = {
   "Downforce":"Take a hazard to pick a template as if one gear lower. Repeatable.",
   "Utility Vehicle":"Can buy Electrical weapons and upgrades. Up to 3 of its upgrades need 1 fewer build slot.",
   "Mob":"Your first Bike doesn't count toward vehicle, team-size, deployment or rare limits.",
-  "Sluggish":"Can't choose a template that is hazardous in its current gear.",
+  "Sluggish":"Never allowed to pick a template marked hazardous for the gear it's in.",
   "Airborne":"Flies over vehicles and terrain, can't collide or set off dropped weapons, can grab loot. Takes 2 extra damage when it wipes out.",
   "Hefty":"Can't be shunted by a lighter vehicle.",
   "Turret":"The Turret Mount upgrade takes no build slots.",
@@ -536,7 +597,7 @@ const ARCH = {
   "Rough Rider":["Daring","After hitting an obstacle, may pivot up to 90° if it ends clear."],
   "Spark":["Tech","Take hazards to stretch a weapon from Medium to Long or add Fire, Blast or Indirect. Unlocks Electrical gear for the whole team.",true],
   "Speed Demon":["Speed","Starting an activation in gear 1–2: +1 hazard. In gear 6: drop 3 hazards."],
-  "Stunt Driver":["Daring","Once per Movement Step, take 2 hazards to ignore one obstacle or vehicle."],
+  "Stunt Driver":["Daring","Once per Movement Step, take 2 hazards to drive clean through one car or obstacle."],
   "Warlord":["Military","Once per round in its Attack Step, a friend within Long may take 2 hazards to fire one weapon."],
 };
 
@@ -814,20 +875,9 @@ function renderCar(c, i, T){
   const archOpts=`<option value="">No archetype</option>`+Object.keys(ARCH).map(a=>{ const taken=team.cars.some(o=>o!==v&&o.arch===a); return opt(a,`${a} · ${ARCH[a][0]}${taken?" (taken)":""}`,a===v.arch); }).join("");
   const secondOpts=`<option value="">Pick a second perk class…</option>`+PERK_CLASSES.filter(p=>!(v.arch&&ARCH[v.arch][0]===p)).map(p=>opt(p,p,p===v.second)).join("");
   const unlocked=[...c.unlocked];
-  const perkHtml = unlocked.length? unlocked.map(cls=>`<div class="perk-class">${esc(cls)} <span class="note">· ${esc(PERKS[cls][0])}</span></div>`+PERKS[cls][1].map((p,pi)=>{ const id=cls+"#"+pi, on=v.perks.includes(id); return `<label class="perk ${on?"on":""}"><input type="checkbox" data-act="perk" data-car="${v.id}" data-perk="${id}" ${on?"checked":""}><span class="pn">${esc(p[0])}<small>${esc(p[2])}</small></span><span class="pc">${p[1]} c</span></label>`; }).join("")).join("")
-    : `<p class="note">Pick an archetype to unlock its perk class. Name the driver to unlock a second class of your choice.</p>`;
-  const weaponsHtml=v.weapons.map(w=>{ const d=W[w.k]; if(!d) return ""; const turret=v.upgrades.find(u=>U[u.k]&&U[u.k].turret&&u.target===w.id); const needsFacing=!d.tags.includes("360")&&d.cat!=="Dropped"&&!turret;
-      const face= needsFacing?`<select data-act="wface" data-car="${v.id}" data-item="${w.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(w.f||"Front")===f)).join("")}</select>`
-        : `<span class="note">${d.cat==="Dropped"?"Rear":turret?"360° turret":"360°"}</span>`;
-      return `<div class="item"><div class="nm">${esc(d.n)}<small>${esc(d.range)} · ${esc(d.dice)}${d.tags.length?" · "+esc(tagLine(d)):""}${d.note?" — "+esc(d.note):""}</small></div><span class="pr">${d.cost} c · ${d.slots} sl</span><button class="x" data-act="wdel" data-car="${v.id}" data-item="${w.id}" aria-label="Remove ${esc(d.n)}">×</button><div class="ctl">${face}</div></div>`; }).join("");
-  const upgradesHtml=v.upgrades.map(u=>{ const d=U[u.k]; if(!d) return "";
-      let ctl="";
-      if(d.facing) ctl=`<select data-act="uface" data-car="${v.id}" data-item="${u.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(u.f||"Front")===f)).join("")}</select>`;
-      if(d.turret){ const facingW=v.weapons.filter(w=>W[w.k]&&W[w.k].cat!=="Dropped"&&!W[w.k].tags.includes("360")); ctl=`<select data-act="utarget" data-car="${v.id}" data-item="${u.id}" aria-label="Turret weapon"><option value="">Mount which weapon?</option>${facingW.map(w=>opt(w.id,`${w.k} (+${W[w.k].cost} c)`,u.target===w.id)).join("")}</select>`; }
-      const tw=d.turret?v.weapons.find(w=>w.id===u.target):null;
-      const price=d.turret?(2+(tw?W[tw.k].cost:0)):d.cost;
-      const sl=d.trailer?`+${d.trailer}`:(d.turret&&v.type==="Tank"?0:d.slots);
-      return `<div class="item"><div class="nm">${esc(d.n)}<small>${d.tags.length?esc(tagLine(d))+" — ":""}${esc(d.note)}</small></div><span class="pr">${price} c · ${sl} sl</span><button class="x" data-act="udel" data-car="${v.id}" data-item="${u.id}" aria-label="Remove ${esc(d.n)}">×</button>${ctl?`<div class="ctl">${ctl}</div>`:""}</div>`; }).join("");
+  const perkHtml = perkListHtml(v,c);
+  const weaponsHtml = weaponItemsHtml(v);
+  const upgradesHtml = upgradeItemsHtml(v);
   const perkCost=v.perks.reduce((a,p)=>a+(PERK_BY_ID[p]?PERK_BY_ID[p].cost:0),0);
   return `<article class="car" aria-label="Vehicle ${i+1}">
     <div class="car-head"><span class="num">${i+1}</span>
@@ -847,7 +897,7 @@ function renderCar(c, i, T){
           <div class="field"><label for="a-${v.id}">Archetype</label><select id="a-${v.id}" data-act="arch" data-car="${v.id}">${archOpts}</select></div>
           <div class="field"><label for="n-${v.id}">Driver name (unlocks a 2nd class)</label><input type="text" id="n-${v.id}" data-act="driver" data-car="${v.id}" value="${esc(v.driver||"")}" placeholder="Unnamed"></div>
         </div>
-        ${v.arch?`<p class="note"><b>${esc(v.arch)}:</b> ${esc(ARCH[v.arch][1])}</p>`:""}
+        ${v.arch?`<p class="note"><b>${esc(v.arch)}:</b> ${esc(ARCH[v.arch][1])}${infoBtn("A:"+v.arch,v.arch)}</p>`:""}
         ${v.named?`<div class="field"><label for="s-${v.id}">Second perk class</label><select id="s-${v.id}" data-act="second" data-car="${v.id}">${secondOpts}</select></div>`:""}
       </div>
 
@@ -891,7 +941,7 @@ function renderBuilder(){
     <section class="panel"><h2>Sponsor</h2>
       <p class="note">One sponsor per team. Every vehicle gets its perk while the team meets the requirement.</p>
       <label class="sponsor ${team.sponsor?"":""}"><input type="radio" name="sp" data-act="sponsor" value="" ${team.sponsor?"":"checked"}><span class="sn">No sponsor</span></label>
-      ${SPONSORS.map(s=>{ const ok=T.elig[s[0]]; return `<label class="sponsor ${ok?"":"dim"}"><input type="radio" name="sp" data-act="sponsor" value="${esc(s[0])}" ${team.sponsor===s[0]?"checked":""}><span class="sn">${esc(s[0])} <span class="status-pill ${ok?"ok":"meh"}">${ok?"Qualifies":"Not yet"}</span></span><span class="sr">${esc(s[1])}</span><span class="sp"><b>${esc(s[2])}:</b> ${esc(s[3])}</span></label>`; }).join("")}
+      ${SPONSORS.map(s=>{ const ok=T.elig[s[0]]; return `<label class="sponsor ${ok?"":"dim"}"><input type="radio" name="sp" data-act="sponsor" value="${esc(s[0])}" ${team.sponsor===s[0]?"checked":""}><span class="sn">${esc(s[0])}${infoBtn("S:"+s[0],s[0])} <span class="status-pill ${ok?"ok":"meh"}">${ok?"Qualifies":"Not yet"}</span></span><span class="sr">${esc(s[1])}</span><span class="sp"><b>${esc(s[2])}:</b> ${esc(s[3])}</span></label>`; }).join("")}
     </section>
     <section class="panel"><h2>Garage</h2>
       <div class="tools" style="margin-bottom:10px">
@@ -925,7 +975,7 @@ function weaponItemsHtml(v){
   return v.weapons.map(w=>{ const d=W[w.k]; if(!d) return ""; const turret=v.upgrades.find(u=>U[u.k]&&U[u.k].turret&&u.target===w.id); const needsFacing=!d.tags.includes("360")&&d.cat!=="Dropped"&&!turret;
     const face= needsFacing?`<select data-act="wface" data-car="${v.id}" data-item="${w.id}" aria-label="Facing">${["Front","Side","Rear"].map(f=>opt(f,f,(w.f||"Front")===f)).join("")}</select>`
       : `<span class="note">${d.cat==="Dropped"?"Rear":turret?"360° turret":"360°"}</span>`;
-    return `<div class="item"><div class="nm">${esc(d.n)}<small>${esc(d.range)} · ${esc(d.dice)}${d.tags.length?" · "+esc(tagLine(d)):""}${d.note?" — "+esc(d.note):""}</small></div><span class="pr">${d.cost} c · ${d.slots} sl</span><button class="x" data-act="wdel" data-car="${v.id}" data-item="${w.id}" aria-label="Remove ${esc(d.n)}">×</button><div class="ctl">${face}</div></div>`; }).join("");
+    return `<div class="item"><div class="nm">${nameBtn("W:"+d.n,d.n)}<small>${esc(d.range)} · ${esc(d.dice)}${d.tags.length?" · "+esc(tagLine(d)):""}${d.note?" — "+esc(d.note):""}</small></div><span class="pr">${d.cost} c · ${d.slots} sl</span><button class="x" data-act="wdel" data-car="${v.id}" data-item="${w.id}" aria-label="Remove ${esc(d.n)}">×</button><div class="ctl">${face}</div></div>`; }).join("");
 }
 function upgradeItemsHtml(v){
   return v.upgrades.map(u=>{ const d=U[u.k]; if(!d) return "";
@@ -935,16 +985,16 @@ function upgradeItemsHtml(v){
     const tw=d.turret?v.weapons.find(w=>w.id===u.target):null;
     const price=d.turret?(2+(tw?W[tw.k].cost:0)):d.cost;
     const sl=d.trailer?`+${d.trailer}`:(d.turret&&v.type==="Tank"?0:d.slots);
-    return `<div class="item"><div class="nm">${esc(d.n)}<small>${d.tags.length?esc(tagLine(d))+" — ":""}${esc(d.note)}</small></div><span class="pr">${price} c · ${sl} sl</span><button class="x" data-act="udel" data-car="${v.id}" data-item="${u.id}" aria-label="Remove ${esc(d.n)}">×</button>${ctl?`<div class="ctl">${ctl}</div>`:""}</div>`; }).join("");
+    return `<div class="item"><div class="nm">${nameBtn("U:"+d.n,d.n)}<small>${d.tags.length?esc(tagLine(d))+" — ":""}${esc(d.note)}</small></div><span class="pr">${price} c · ${sl} sl</span><button class="x" data-act="udel" data-car="${v.id}" data-item="${u.id}" aria-label="Remove ${esc(d.n)}">×</button>${ctl?`<div class="ctl">${ctl}</div>`:""}</div>`; }).join("");
 }
 function perkListHtml(v,c){
   const unlocked=[...c.unlocked];
   if(!unlocked.length) return `<p class="note">No perk class unlocked. Pick an archetype for this driver to unlock one, or skip perks.</p>`;
-  return `<div class="perks">`+unlocked.map(cls=>`<div class="perk-class">${esc(cls)} <span class="note">· ${esc(PERKS[cls][0])}</span></div>`+PERKS[cls][1].map((p,pi)=>{ const id=cls+"#"+pi, on=v.perks.includes(id); return `<label class="perk ${on?"on":""}"><input type="checkbox" data-act="perk" data-car="${v.id}" data-perk="${id}" ${on?"checked":""}><span class="pn">${esc(p[0])}<small>${esc(p[2])}</small></span><span class="pc">${p[1]} c</span></label>`; }).join("")).join("")+`</div>`;
+  return `<div class="perks">`+unlocked.map(cls=>`<div class="perk-class">${esc(cls)} <span class="note">· ${esc(PERKS[cls][0])}</span></div>`+PERKS[cls][1].map((p,pi)=>{ const id=cls+"#"+pi, on=v.perks.includes(id); return `<label class="perk ${on?"on":""}"><input type="checkbox" data-act="perk" data-car="${v.id}" data-perk="${id}" ${on?"checked":""}><span class="pn">${esc(p[0])}${infoBtn("P:"+id,p[0])}<small>${esc(p[2])}</small></span><span class="pc">${p[1]} c</span></label>`; }).join("")).join("")+`</div>`;
 }
 function sponsorListHtml(T){
   return `<label class="sponsor"><input type="radio" name="sp" data-act="sponsor" value="" ${team.sponsor?"":"checked"}><span class="sn">No sponsor</span></label>`+
-    SPONSORS.map(s=>{ const ok=T.elig[s[0]]; return `<label class="sponsor ${ok?"":"dim"}"><input type="radio" name="sp" data-act="sponsor" value="${esc(s[0])}" ${team.sponsor===s[0]?"checked":""}><span class="sn">${esc(s[0])} <span class="status-pill ${ok?"ok":"meh"}">${ok?"Qualifies":"Not yet"}</span></span><span class="sr">${esc(s[1])}</span><span class="sp"><b>${esc(s[2])}:</b> ${esc(s[3])}</span></label>`; }).join("");
+    SPONSORS.map(s=>{ const ok=T.elig[s[0]]; return `<label class="sponsor ${ok?"":"dim"}"><input type="radio" name="sp" data-act="sponsor" value="${esc(s[0])}" ${team.sponsor===s[0]?"checked":""}><span class="sn">${esc(s[0])}${infoBtn("S:"+s[0],s[0])} <span class="status-pill ${ok?"ok":"meh"}">${ok?"Qualifies":"Not yet"}</span></span><span class="sr">${esc(s[1])}</span><span class="sp"><b>${esc(s[2])}:</b> ${esc(s[3])}</span></label>`; }).join("");
 }
 
 /* ---------- home ---------- */
@@ -964,6 +1014,19 @@ function renderHome(){
     </div>
     ${has?`<div class="panel"><span class="lbl">On screen now</span><div class="resume-row"><div><b>${esc(team.name)}</b><div class="note">${team.cars.length} vehicle${team.cars.length===1?"":"s"} · ${T.total} / ${team.budget} cans${team.example?" · example team":""}</div></div><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn small" data-act="save">${saves.some(x=>x.name===team.name)?"Update save":"Save"}</button><button class="btn small primary" data-act="gobuilder">Continue</button></span></div></div>`:""}
     ${saves.length?`<div class="panel"><span class="lbl">Saved on this device</span><div class="save-list" style="margin-top:6px">${saves.map((s,i)=>`<div class="save-row"><span title="${esc(s.name)}">${esc(s.name)} · ${s.total} c</span><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${confirmDel===i?`<span class="note" style="align-self:center">Delete this build?</span><button class="btn small danger" data-act="sdelok" data-i="${i}">Delete</button><button class="btn small" data-act="sdelno">Keep</button>`:`<button class="btn small" data-act="sload" data-i="${i}">Open</button><button class="btn small danger" data-act="sdel" data-i="${i}" aria-label="Delete ${esc(s.name)}">Delete</button>`}</span></div>`).join("")}</div></div>`:""}
+    <details class="panel rb-panel" data-rbpanel="1" ${RBOPEN||RBSTATUS.msg||RBSTATUS.err||RBSTATUS.warn||RBCONFIRM?"open":""}>
+      <summary><span class="lbl">Your rulebook</span>${rbSummaryPill()}</summary>
+      <div class="rb-body">
+      ${hasRB()?rbChecklist():""}
+      <p class="note" style="margin:6px 0 8px">${hasRB()?`Tap any weapon, upgrade, perk, driver or sponsor to read its rules from your copy.`:`Own the Gaslands rulebook? Load your PDF chapters (Vehicles, Drivers, Sponsors) to unlock tap-for-rules on every item. Everything stays local to your browser: the PDFs are read right here, and nothing is sent anywhere. Don't have it yet? Get it from Planet Smasher Games.`}</p>
+      ${RBSTATUS.msg?`<div class="rb-status busy" role="status">${esc(RBSTATUS.msg)}</div>`:RBSTATUS.err?`<div class="rb-status err" role="alert">${esc(RBSTATUS.err)}</div>`:RBSTATUS.warn?`<div class="rb-status warn" role="alert">${esc(RBSTATUS.warn)}</div>`:RBSTATUS.ok?`<div class="rb-status ok" role="status">${esc(RBSTATUS.ok)}</div>`:""}
+      <div class="tools" style="margin-top:8px">
+        <label class="btn small primary file-btn">${hasRB()?"Load more PDFs":"Load my rulebook PDFs"}<input class="vh" type="file" accept="application/pdf,.pdf" multiple data-act="rbfile"></label>
+        ${hasRB()?"":`<a class="btn small" href="https://planetsmashergames.com" target="_blank" rel="noopener">Get the rulebook</a>`}
+        ${hasRB()?(RBCONFIRM?`<span class="note" style="align-self:center">Remove the rule text from this device?</span><button class="btn small danger" data-act="rbclearok">Remove</button><button class="btn small" data-act="rbclearno">Keep</button>`:`<button class="btn small ghost" data-act="rbclear">Remove from this device</button>`):""}
+      </div>
+      </div>
+    </details>
     <ol class="how">
       <li><b>Team</b>Cans and number of cars.</li>
       <li><b>Each car</b>Vehicle, driver, weapons, upgrades, perks.</li>
@@ -1167,12 +1230,15 @@ function renderPlay(){
         <span class="note">Crew ${c.st.cr} · Armour ${c.st.ar} · Weight ${c.st.wt}</span></div>
       ${p.fire?`<p class="note">On Fire: 1 damage at the start of each activation, then roll a die. Beat your hazard count (${p.hz}) to put it out.</p>`:""}
 
-      <details class="refbox"><summary>Quick reference</summary><div class="ref" style="margin-top:6px">
-        ${v.arch?`<div><b>${esc(v.arch)}:</b> ${esc(ARCH[v.arch][1])}</div>`:""}
-        ${wList}${uList}${pList}
-        ${sp?`<div><b>${esc(sp[2])} (${esc(sp[0])}):</b> ${esc(sp[3])}</div>`:""}
-        ${c.rules.map(r=>`<div><b>${esc(r)}:</b> ${esc(VEHICLE_RULES[r]||"")}</div>`).join("")}
-      </div></details>
+      <div class="dash-sec"><span class="lbl">${hasRB()?"Loadout · tap for the rules":"Loadout"}</span>${i===0?`<div class="chip-key" aria-label="Colour key"><span><i class="sw a"></i>Driver</span><span><i class="sw w"></i>Weapon</span><span><i class="sw u"></i>Upgrade</span><span><i class="sw p"></i>Vehicle, perk, rule</span><span><i class="sw s"></i>Sponsor</span></div>`:""}<div class="chips">
+        ${chip("V:"+v.type,v.type,"")}
+        ${v.arch?chip("A:"+v.arch,v.arch,"a"):""}
+        ${v.weapons.filter(w=>W[w.k]).map(w=>chip("W:"+w.k,w.k,"w")).join("")}
+        ${v.upgrades.filter(u=>U[u.k]).map(u=>chip("U:"+u.k,u.k,"u")).join("")}
+        ${v.perks.filter(x=>PERK_BY_ID[x]).map(x=>chip("P:"+x,PERK_BY_ID[x].n,"")).join("")}
+        ${sp?chip("S:"+sp[0],sp[2]+" ("+sp[0]+")","s"):""}
+        ${c.rules.map(r=>chip("R:"+r,r,"")).join("")}
+      </div>${hasRB()?"":`<p class="note">Own the rulebook? Load your PDFs on the home page to tap any of these for its rules.</p>`}</div>
     </article>`;
   }).join("");
   return `<section class="play">
@@ -1182,6 +1248,234 @@ function renderPlay(){
     </div>
     <div class="play-cars ${T.cars.length===1?"one":""}">${cars}</div>
   </section>`;
+}
+
+
+/* ============================== RULEBOOK (owner-only) ==============================
+   No rule text ships with this page. Cards only open after the viewer loads their own
+   rulebook PDFs; those are read in their browser and the text stays on their device.
+   REF_PAGES is page numbers only. */
+const REF_PAGES={"V:Buggy":2,"V:Hot Rod":2,"V:Monster Truck":2,"V:Muscle Car":3,"V:Passenger Car":3,"V:Pickup":3,"V:Sports Car":3,"V:Van":3,"V:Bike":4,"V:Heavy Truck":4,"V:Bus":4,"V:Gyrocopter":4,"V:Helicopter":5,"V:Tank":5,"V:War Rig":5,"G:360":7,"G:Ammo":7,"G:Blast":7,"G:Electrical":7,"G:Fire":7,"G:Ignores Armour":7,"G:Indirect":7,"G:Rattle":7,"G:Splash":7,"G:Tactical":7,"W:Caltrop Dropper":9,"W:Glue Dropper":9,"W:Mine Dropper":9,"W:Napalm Dropper":10,"W:Oil Slick Dropper":10,"W:Smoke Dropper":10,"W:RC Car Bombs":10,"W:Sentry Gun":10,"W:Arc Lightning Gun":11,"W:BFG":11,"W:Grav Gun":12,"W:Harpoon":12,"W:Kinetic Super Booster":12,"W:Sonic Cannon":12,"W:Tank Cannon":12,"W:Thumper":12,"W:Wreck Lobber":13,"W:Wrecking Ball":13,"U:Big Tyres":15,"U:Bull Bar":15,"U:Buzzblades":15,"U:CB Radio":15,"U:Extra Armour":15,"U:Extra Crewmember":15,"U:Heavy Frame":15,"U:Infuriating Jingle":15,"U:Magnetic Jammer":15,"U:Nitro Booster":15,"U:Ram":15,"U:Ramshackle Hull Plating":15,"U:Roll Cage":15,"U:Siren":15,"U:Spikes":15,"U:Tank Tracks":15,"U:Trailer (Lightweight)":15,"U:V10 Engine":16,"U:Wheel Scythes":16,"U:Experimental Nuclear Engine":16,"U:Experimental Teleporter":16,"U:Exploding Ram":16,"U:Grabber Arm":17,"U:Improvised Sludge Thrower":17,"U:Magnetic Clamps":17,"U:Rubber Bumpers":17,"U:Turret Mount":17,"U:Wall Of Amplifiers":17,"R:Roll Cage":2,"R:Redline":2,"R:All Terrain":2,"R:Up And Over":2,"R:Downforce":3,"R:Utility Vehicle":4,"R:Mob":4,"R:Sluggish":4,"R:Airborne":4,"R:Hefty":5,"R:Turret":5,"R:Articulated":5,"W:Shotgun":8,"W:Thunder Sticks":8,"G:Volatile":7,"W:Machine Gun":8,"W:Heavy Machine Gun":8,"W:Mini-Gun":8,"W:Scrap Cannon":8,"W:Rockets":8,"W:Mortar":8,"W:Missiles":8,"W:Flamethrower":8,"W:Handgun":8,"W:Bazooka":8,"W:Grenades":8,"W:Magnum":8,"W:Molotov Cocktails":8,"W:Submachine Gun":8,"W:Combat Laser":11,"A:Arsonist":1,"A:Blackfinger":1,"A:Brawler":1,"A:Gremlin":1,"A:Gun Nut":1,"A:Hauler":1,"A:Hunter":1,"A:Mystic":1,"A:Professional":2,"A:Psycho":2,"A:Raider":2,"A:Road Warrior":2,"A:Rough Rider":2,"A:Spark":2,"A:Speed Demon":2,"A:Stunt Driver":2,"A:Warlord":2,"P:Aggression#0":3,"P:Aggression#1":3,"P:Aggression#2":3,"P:Aggression#3":3,"P:Aggression#4":3,"P:Aggression#5":3,"P:Badass#0":3,"P:Badass#1":3,"P:Badass#2":3,"P:Badass#3":3,"P:Badass#4":3,"P:Badass#5":3,"P:Daring#0":4,"P:Daring#1":4,"P:Daring#2":4,"P:Daring#3":4,"P:Daring#4":4,"P:Daring#5":4,"P:Fireworks#0":4,"P:Fireworks#1":4,"P:Fireworks#2":4,"P:Fireworks#3":4,"P:Fireworks#4":4,"P:Fireworks#5":4,"P:Military#0":5,"P:Military#1":5,"P:Military#2":5,"P:Military#3":5,"P:Military#4":5,"P:Military#5":5,"P:Mischief#0":5,"P:Mischief#1":5,"P:Mischief#2":5,"P:Mischief#3":5,"P:Mischief#4":5,"P:Mischief#5":5,"P:Precision#0":6,"P:Precision#1":6,"P:Precision#2":6,"P:Precision#3":6,"P:Precision#4":6,"P:Precision#5":6,"P:Pursuit#0":6,"P:Pursuit#1":6,"P:Pursuit#2":6,"P:Pursuit#3":6,"P:Pursuit#4":6,"P:Pursuit#5":6,"P:Pyromania#0":7,"P:Pyromania#1":7,"P:Pyromania#2":7,"P:Pyromania#3":7,"P:Pyromania#4":7,"P:Pyromania#5":7,"P:Reckless#0":7,"P:Reckless#1":7,"P:Reckless#2":7,"P:Reckless#3":7,"P:Reckless#4":7,"P:Reckless#5":7,"P:Rowdy#0":8,"P:Rowdy#1":8,"P:Rowdy#2":8,"P:Rowdy#3":8,"P:Rowdy#4":8,"P:Rowdy#5":8,"P:Speed#0":8,"P:Speed#1":8,"P:Speed#2":8,"P:Speed#3":8,"P:Speed#4":8,"P:Speed#5":8,"P:Tech#0":9,"P:Tech#1":9,"P:Tech#2":9,"P:Tech#3":9,"P:Tech#4":9,"P:Tech#5":9,"P:Wrench#0":9,"P:Wrench#1":9,"P:Wrench#2":9,"P:Wrench#3":9,"P:Wrench#4":9,"P:Wrench#5":9,"S:Chivo":1,"S:Highway Patrol":2,"S:Idris":2,"S:Jumbo":3,"S:Miyazaki":3,"S:Mishkin":4,"S:Maxxine":4,"S:Order of the Inferno":5,"S:Rusty":5,"S:Rutherford":6,"S:Scarlett":7,"S:Slime":8,"S:Verney":8,"S:The Warden":9,"S:Beverly":10,"U:Trailer (Middleweight)":15,"U:Trailer (Heavyweight)":15};
+const REF_DOC=k=>/^[VWURG]:/.test(k)?"Vehicles chapter (v5.3)":/^[AP]:/.test(k)?"Drivers & Perks chapters (v5.2)":"Sponsors chapter (v5.2)";
+const GLOSS_KEY=t=>t==="360"?"G:360":t.startsWith("Ammo")?"G:Ammo":t.startsWith("Ignores Armour")?"G:Ignores Armour":["Blast","Electrical","Fire","Indirect","Rattle","Splash","Tactical"].includes(t)?"G:"+t:null;
+const LS_RB="gtb.rulebook.v1";
+let RB=lsGet(LS_RB); let RBSTATUS={}; let RBCONFIRM=false; let SHEET=null; let RBOPEN=false;
+const hasRB=()=>!!(RB&&RB.entries&&Object.keys(RB.entries).length);
+// Page -> ordered text lines, reading two-column blocks left column first.
+async function rbPageLines(page){
+  const W = page.view[2]-page.view[0], mid = W/2;
+  const tc = await page.getTextContent();
+  const rows = [];
+  for (const it of tc.items){
+    if (!it.str || !it.str.trim()) continue;
+    const x = it.transform[4], y = it.transform[5];
+    let row = rows.find(r => Math.abs(r.y - y) < 2.5);
+    if (!row){ row = {y, parts:[]}; rows.push(row); }
+    row.parts.push({x, s: it.str, w: it.width||0});
+  }
+  rows.sort((a,b)=>b.y-a.y);
+  const join = parts => { parts.sort((a,b)=>a.x-b.x); let out="", end=null;
+    for (const p of parts){ if (end!==null && p.x-end>1.5 && !out.endsWith(" ") && !p.s.startsWith(" ")) out+=" "; out+=p.s; end=p.x+p.w; }
+    return out.replace(/\s+/g," ").trim(); };
+  // find the right-column start: the most common x among items that begin past the middle after a real gap
+  const cand={};
+  for (const r of rows){ r.parts.sort((a,b)=>a.x-b.x);
+    for (let i=0;i<r.parts.length;i++){ const p=r.parts[i]; if (p.x < mid-30 || p.x > mid+40) continue;
+      const prevEnd = i? r.parts[i-1].x + r.parts[i-1].w : -1;
+      if (i===0 || p.x - prevEnd >= 6){ const k=Math.round(p.x/3)*3; cand[k]=(cand[k]||0)+1; } } }
+  let colX=null, best=0; for (const k in cand) if (cand[k]>best){ best=cand[k]; colX=+k; }
+  const twoCol = best>=3;
+  for (const r of rows){
+    if (!twoCol){ r.kind="full"; r.F=join(r.parts); continue; }
+    const iR = r.parts.findIndex((p,i)=> p.x >= colX-4 && (i===0 || p.x-(r.parts[i-1].x+r.parts[i-1].w)>=4));
+    const L = iR<0 ? r.parts : r.parts.slice(0,iR), R = iR<0 ? [] : r.parts.slice(iR);
+    const lEnd = L.length ? Math.max(...L.map(p=>p.x+p.w)) : -1;
+    if (L.length && lEnd > colX+2) { r.kind="full"; r.F=join(r.parts); }
+    else if (L.length && R.length) { r.kind="split"; r.L=join(L); r.R=join(R); }
+    else if (!L.length && R.length) { r.kind="right"; r.R=join(R); }
+    else if (L.length && lEnd < colX-4) { r.kind="leftonly"; r.L=join(L); }
+    else { r.kind="full"; r.F=join(r.parts); }
+  }
+  // a lone "split" row between full-width rows is a justified full-width line, not two columns
+  const colKind=k=>k==="split"||k==="right"||k==="leftonly";
+  const lone=[];
+  for (let i=0;i<rows.length;i++){ const r=rows[i]; if(r.kind!=="split"&&r.kind!=="right") continue;
+    const near=[rows[i-2],rows[i-1],rows[i+1],rows[i+2]].filter(Boolean);
+    if(!near.some(n=>colKind(n.kind))) lone.push(r); }
+  lone.forEach(r=>{ r.kind="full"; r.F=join(r.parts); });
+  // left-only rows count as column text when they sit next to column rows
+  const isCol = k => k==="split"||k==="right";
+  for (let i=0;i<rows.length;i++) if (rows[i].kind==="leftonly"){
+    let j=i-1; while(j>=0&&rows[j].kind==="leftonly") j--; let k=i+1; while(k<rows.length&&rows[k].kind==="leftonly") k++;
+    rows[i].kind = ((j>=0&&isCol(rows[j].kind)) || (k<rows.length&&isCol(rows[k].kind))) ? "colL" : "full";
+    if (rows[i].kind==="full") rows[i].F=rows[i].L;
+  }
+  const out=[]; let bl=[], br=[];
+  const flush=()=>{ out.push(...bl, ...br); bl=[]; br=[]; };
+  for (const r of rows){
+    if (r.kind==="full"){ flush(); out.push(r.F); }
+    else { if (r.L) bl.push(r.L); if (r.R) br.push(r.R); }
+  }
+  flush();
+  return out.filter(Boolean);
+}
+
+
+// Splits extracted rulebook text into one passage per item. Runs in the browser on the user's own PDFs.
+function rbNorm(s){ return String(s).replace(/º/g,"°").normalize("NFKC").replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/º/g,"°").replace(/\s+/g," ").trim(); }
+function rbJoin(lines){ const out=[]; lines.forEach(t=>{ if(out.length && /(fi|fl|ff|ffi|ffl)$/.test(out[out.length-1]) && /^[a-z]/.test(t)) out[out.length-1]+=t; else out.push(t); }); return out.join("\n"); }
+function rbSegment(pages, spec){
+  // pages: [[line,...], ...] for one PDF. spec: {kind, headings:[{key,name,alts?}], stops:[...], inline:[{key,name}], perks?}
+  const L=[]; pages.forEach((lines,pi)=>lines.forEach(t=>{ const n=rbNorm(t); if(!n) return; if(/^Copyright ©/.test(n)||/^PlanetSmasherGames\.com/.test(n)) return; L.push({t:n,p:pi+1}); }));
+  const out={};
+  const isHead = new Map(); // line index -> key|null(stop)
+  const eq=(a,b)=>a.toLowerCase()===b.toLowerCase();
+  // exact-line headings
+  (spec.headings||[]).forEach(h=>{ const names=[h.name,...(h.alts||[])].map(rbNorm);
+    const hits=[]; for(let i=0;i<L.length;i++){ if(isHead.has(i)) continue; if(names.some(n=>eq(L[i].t,n))) hits.push(i); }
+    if(hits.length) isHead.set(h.last?hits[hits.length-1]:hits[0], h.key); });
+  (spec.stops||[]).forEach(sx=>{ for(let i=0;i<L.length;i++){ const t=L[i].t; if(sx instanceof RegExp ? sx.test(t) : eq(t,rbNorm(sx))) if(!isHead.has(i)) isHead.set(i,null); } });
+  // perk lines "N. Name (" and class header lines "Class Flavour..."
+  (spec.perks||[]).forEach(pk=>{ const re=new RegExp("^"+pk.n+"\\. "+rbNorm(pk.name).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\s*:?\\s*\\(","i");
+    for(let i=0;i<L.length;i++){ if(re.test(L[i].t)){ isHead.set(i,pk.key); break; } } });
+  (spec.classes||[]).forEach(c=>{ for(let i=0;i<L.length;i++){ if((eq(L[i].t,c)||L[i].t.startsWith(c+" "))&&!/^\d/.test(L[i].t)&&!isHead.has(i)){ isHead.set(i,null); break; } } });
+  const idx=[...isHead.keys()].sort((a,b)=>a-b);
+  idx.forEach((i,j)=>{ const key=isHead.get(i); if(!key) return; const end=j+1<idx.length?idx[j+1]:L.length;
+    let lines=L.slice(i,end);
+    if(lines.length<=1){ // heading pulled away from its text (e.g. by a table): jump to the first sentence naming the item
+      const nm=L[i].t.toLowerCase();
+      for(let k=i+1;k<Math.min(L.length,i+90);k++){ if(L[k].t.length>40 && L[k].t.toLowerCase().includes(nm) && !/( \d+){2,}$/.test(L[k].t)){
+        const nx=idx.find(q=>q>k); lines=[L[i]].concat(L.slice(k, nx==null?L.length:nx)); break; } } }
+    if(spec.clean && (!spec.cleanKeys || spec.cleanKeys.test(key))) lines=lines.filter(x=>!spec.clean.some(re=>re.test(x.t)));
+    if(spec.endAfter){ const e=lines.findIndex(x=>spec.endAfter.test(x.t)); if(e>=0) lines=lines.slice(0,e+1); }
+    if(spec.maxLines) lines=lines.slice(0,spec.maxLines);
+    out[key]={text:rbJoin(lines.map(x=>x.t)),page:L[i].p,_i:i,_end:end}; });
+  // a 1-3 word line that opens an entry but closes the previous one (e.g. "Hefty).") belongs to the previous entry
+  const ordered=Object.entries(out).filter(([k,v])=>v._i!=null).sort((a,b)=>a[1]._i-b[1]._i);
+  for(let j=1;j<ordered.length;j++){ const prev=ordered[j-1][1], cur=ordered[j][1]; const cl=cur.text.split("\n");
+    if(cl.length>1 && !/[.!?)"]$/.test(prev.text.trim()) && cl[1].split(" ").length<=3 && /[.)]$/.test(cl[1])){ prev.text+=" "+cl[1]; cl.splice(1,1); cur.text=cl.join("\n"); } }
+  Object.values(out).forEach(v=>{ delete v._i; delete v._end; });
+  // inline "Name: text" rules (vehicle special rules, Shotgun, Thunder Sticks)
+  (spec.inline||[]).forEach(r=>{ const re=new RegExp("^"+rbNorm(r.name).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\s*:","i");
+    for(let i=0;i<L.length;i++){ if(re.test(L[i].t)){ const buf=[L[i].t]; for(let k=i+1;k<L.length&&buf.length<8;k++){ const t=L[k].t; if(isHead.has(k)||/^[A-Z][A-Za-z ']{1,30}\s*:/.test(t)||/^\{\{/.test(t)||/^(Max |Vehicle Type|Build$|Hull Cost)/.test(t)) break; buf.push(t); } out[r.key]={text:rbJoin(buf),page:L[i].p}; break; } } });
+  // table rows for items without a description paragraph
+  (spec.rows||[]).forEach(r=>{ if(out[r.key]) return; const re=new RegExp("^"+rbNorm(r.name).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(\\s|$|\\s*\\()","i");
+    for(let i=0;i<L.length;i++){ if(re.test(L[i].t)&&!isHead.has(i)){ out[r.key]={text:L[i].t,page:L[i].p,row:true}; break; } } });
+  return out;
+}
+
+
+// Builds the splitter specs from the tool's own data tables (VEHICLES, W, U, ARCH, PERKS, SPONSORS).
+function rbSpecs(){
+  const H=(key,name,alts,last)=>({key,name,alts,last});
+  const vehHeads=Object.keys(VEHICLES).map(k=>H("V:"+k,k));
+  const wHeads=[H("W:Caltrop Dropper","Caltrop Dropper",["Caltrops Dropper"]),H("W:Mine Dropper","Mine Dropper",["Mines Dropper"]),
+    ...["Glue Dropper","Napalm Dropper","Oil Slick Dropper","Smoke Dropper","RC Car Bombs","Sentry Gun","Arc Lightning Gun","BFG","Grav Gun","Harpoon","Kinetic Super Booster","Sonic Cannon","Tank Cannon","Thumper","Wreck Lobber","Wrecking Ball"].map(n=>H("W:"+n,n,undefined,true))];
+  const uHeads=Object.keys(U).filter(n=>!/^Trailer/.test(n)).map(n=>H("U:"+n,n, n==="Bull Bar"?["Bull Bars"]: n==="Nitro Booster"?["Nitro"]:undefined, true)).concat([H("U:Trailer (Lightweight)","Trailers")]);
+  const gHeads=[["360","360°"],["Ammo","Ammo (X)"],["Blast","Blast"],["Electrical","Electrical"],["Fire","Fire"],["Ignores Armour","Ignore Armour (X)"],["Indirect","Indirect"],["Rattle","Rattle"],["Splash","Splash"],["Tactical","Tactical"]].map(([k,n])=>H("G:"+k,n));
+  const vehicles={ label:"Vehicles",
+    match:t=>/Chapter 2:/.test(t)||(/Vehicle Types/.test(t)&&/Common Upgrades/.test(t)),
+    headings:[...vehHeads,...wHeads,...uHeads,...gHeads],
+    stops:["Vehicle Types","Common Vehicle Types","Rare Vehicle Types","Articulated Vehicles","Common Special Rules","Weapons","Common Weapons","Hand Weapons","Dropped Weapons","Rare Weapons","Upgrades","Common Upgrades","Rare Upgrades","Random Teams","Attacking With Weapons With",/^Modelling Your War Rig/,/^(Build|Cans|Slots|Attack|Dice)$/,/^Common (Weapons|Upgrades) /,/^(Hand-Weapons|Dropped Weapons|Rare Weapons|Rare Upgrades) (Range|Special)/],
+    inline:[...Object.keys(VEHICLE_RULES).map(r=>({key:"R:"+r,name:r})),{key:"W:Shotgun",name:"Shotgun"},{key:"W:Thunder Sticks",name:"Thunder Sticks"},{key:"G:Volatile",name:"Volatile"}],
+    rows:[...Object.keys(W).map(n=>({key:"W:"+n,name:n})),...Object.keys(U).filter(n=>!/^Trailer/.test(n)).map(n=>({key:"U:"+n,name:n}))],
+    clean:[/^(Max |Vehicle Type|Gear ng|Hull Cost|Slots$|Build$|\{\{|\[PULL)/,/^\d/,/^[A-Za-z ]+( \d+){4,}$/],
+    cleanKeys:/^V:/,
+  };
+  const drivers={ label:"Drivers & Perks",
+    match:t=>/Chapter 3:/.test(t)||(/Driver Archetypes/.test(t)&&/Perk Class/.test(t)),
+    headings:Object.keys(ARCH).map(a=>H("A:"+a,a)),
+    stops:["Chapter 4: Perks","Driver Archetypes","Short, Medium & Long Templates",/^Chapter( \d+:?)?$/,/^Perks represent the skills/],
+    endAfter:/^Perk Class/,
+    perks:PERK_CLASSES.flatMap(c=>PERKS[c][1].map((p,i)=>({key:"P:"+c+"#"+i,n:i+1,name:p[0]}))),
+    classes:PERK_CLASSES,
+  };
+  const sponsors={ label:"Sponsors", match:t=>/Sponsor/.test(t)&&/Chivo/.test(t)&&/Rutherford/.test(t), headings:SPONSORS.map(s=>H("S:"+s[0],s[0])) };
+  return [vehicles,drivers,sponsors];
+}
+function rbBuild(docs){ // docs: [{name, pages:[[lines]]}]
+  const specs=rbSpecs(), entries={}, found=[];
+  const files=[];
+  docs.forEach(d=>{ const all=d.pages.flat().join("\n"); const sp=specs.find(s=>s.match(all)); if(!sp) return; found.push(sp.label); Object.assign(entries, rbSegment(d.pages, sp));
+    const ver=(all.match(/Version\s+(\d+(?:\.\d+)?)/)||[])[1]||""; files.push({label:sp.label,file:d.name,version:ver,pages:d.pages.length}); });
+  ["U:Trailer (Middleweight)","U:Trailer (Heavyweight)"].forEach(k=>{ if(entries["U:Trailer (Lightweight)"]&&!entries[k]) entries[k]=entries["U:Trailer (Lightweight)"]; });
+  return {entries, found, files};
+}
+
+
+let pdfjsReady=null;
+function loadPdfJs(){ if(window.pdfjsLib) return Promise.resolve(window.pdfjsLib); if(pdfjsReady) return pdfjsReady;
+  pdfjsReady=new Promise((res,rej)=>{ const sc=document.createElement("script"); sc.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+    sc.onload=()=>{ try{ window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"; res(window.pdfjsLib); }catch(e){ rej(e); } };
+    sc.onerror=()=>{ pdfjsReady=null; rej(new Error("Couldn't load the PDF reader. Check your connection and try again.")); };
+    document.head.appendChild(sc); });
+  return pdfjsReady; }
+async function loadRulebook(files){
+  if(!files.length) return;
+  RBSTATUS={busy:true,msg:"Loading the PDF reader…"}; render();
+  try{
+    const lib=await loadPdfJs(); const docs=[];
+    for(const f of files){ RBSTATUS={busy:true,msg:`Reading ${f.name}…`}; render();
+      const doc=await lib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise; const pages=[];
+      for(let i=1;i<=doc.numPages;i++) pages.push(await rbPageLines(await doc.getPage(i)));
+      docs.push({name:f.name,pages}); }
+    const {entries,found,files:chFiles}=rbBuild(docs);
+    if(!found.length){ RBSTATUS={err:"Those files don't look like the Gaslands Vehicles, Drivers or Sponsors chapters."}; render(); return; }
+    const chapters=[...new Set([...(RB&&RB.chapters||[]),...found])];
+    const now=new Date().toISOString();
+    const fileInfo=Object.assign({}, RB&&RB.files||{}); chFiles.forEach(f=>{ fileInfo[f.label]=Object.assign({at:now},f); });
+    RB={at:now,chapters,files:fileInfo,entries:Object.assign({},RB&&RB.entries||{},entries)};
+    let saved=true; try{ localStorage.setItem(LS_RB,JSON.stringify(RB)); }catch(e){ saved=false; }
+    RBSTATUS= saved ? {} : {warn:"This browser wouldn't keep the rule text, so it will be gone after you close the page."};
+  }catch(e){ RBSTATUS={err:(e&&e.message)||"Couldn't read that PDF."}; }
+  render();
+}
+function rbSummaryPill(){
+  const n=hasRB()?["Vehicles","Drivers & Perks","Sponsors"].filter(l=>(RB.files&&RB.files[l])||(RB.chapters||[]).includes(l)).length:0;
+  return `<span class="status-pill ${n===3?"ok":n?"meh":""}" style="${n?"":"background:var(--panel-2);color:var(--muted)"}">${n===3?"All 3 chapters loaded":n?`${n} of 3 chapters loaded`:"Not loaded"}</span>`;
+}
+function rbChecklist(){
+  const fmtDate=iso=>{ try{ return new Date(iso).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }catch(e){ return ""; } };
+  return `<ul class="rb-list">${["Vehicles","Drivers & Perks","Sponsors"].map(lbl=>{
+    const f=RB.files&&RB.files[lbl], have=f||(RB.chapters||[]).includes(lbl);
+    const detail=f?[f.file, f.version?"v"+f.version:"", f.pages?f.pages+" pages":"", f.at?"loaded "+fmtDate(f.at):""].filter(Boolean).join(" · "):(have?"loaded":"not loaded yet");
+    return `<li class="${have?"have":"miss"}"><span class="rb-mark" aria-hidden="true">${have?"✓":"–"}</span><span><b>${esc(lbl)}</b><small>${esc(detail)}</small></span></li>`; }).join("")}</ul>`;
+}
+function chip(key,label,cls){ return hasRB()?`<button class="chip-btn ${cls||""}" data-act="ref" data-ref="${esc(key)}">${esc(label)}</button>`:`<span class="chip-btn locked ${cls||""}">${esc(label)}</span>`; }
+function infoBtn(key,name){ return hasRB()?`<button class="info-btn" data-act="ref" data-ref="${esc(key)}" aria-label="Rules for ${esc(name)}">i</button>`:""; }
+function nameBtn(key,name){ return hasRB()?`<button class="name-btn" data-act="ref" data-ref="${esc(key)}">${esc(name)}</button>`:esc(name); }
+function refMeta(key){
+  const t=key.slice(0,1), name=key.slice(2);
+  if(t==="W"&&W[name]){ const d=W[name]; return {title:d.n,kind:d.cat==="Hand"?"Hand weapon":d.cat==="Dropped"?"Dropped weapon":d.cat+" weapon",meta:[["Range",d.range],["Attack dice",d.dice],["Build slots",d.slots],["Cost",d.cost?d.cost+" cans":"free"]],tags:d.tags}; }
+  if(t==="U"&&U[name]){ const d=U[name]; return {title:d.n,kind:d.cat+" upgrade",meta:[["Build slots",d.trailer?"adds "+d.trailer:d.slots],["Cost",d.turret?"2 + weapon's cost":d.cost+" cans"]],tags:d.tags||[]}; }
+  if(t==="P"&&PERK_BY_ID[name]){ const q=PERK_BY_ID[name]; return {title:q.n,kind:q.cls+" perk",meta:[["Cost",q.cost+" cans"]],tags:[]}; }
+  if(t==="A"&&ARCH[name]) return {title:name,kind:"Driver archetype",meta:[["Perk class",ARCH[name][0]]],tags:[]};
+  if(t==="S"&&SPONSORS.some(y=>y[0]===name)) return {title:name,kind:"Sponsor",meta:[],tags:[]};
+  if(t==="R") return {title:name,kind:"Vehicle special rule",meta:[],tags:[]};
+  if(t==="V"&&VEHICLES[name]){ const b=VEHICLES[name]; return {title:name,kind:b[8]?"Rare vehicle":"Common vehicle",meta:[["Max gear",b[0]],["Handling",b[1]],["Crew",b[2]],["Weight",b[3]],["Armour",b[4]],["Hull",b[5]],["Build slots",b[6]],["Cost",b[7]+" cans"]],tags:[],rules:b[9]}; }
+  return {title:name,kind:"",meta:[],tags:[]};
+}
+function fmtVerb(text){ const lines=String(text).split("\n"); const out=[];
+  const head = lines.length>1 && lines[0].length<=40 && !/[.:]$/.test(lines[0]) && !/:\s/.test(lines[0]);
+  lines.forEach((l,i)=>{ if(i===0||(head&&i===1)||/^(●|\d+\.\s|Perk Class:|Volatile:|[A-Z][A-Za-z' ]{1,28}:\s)/.test(l)) out.push(l); else out[out.length-1]+=" "+l; });
+  return out.map((x,i)=>`<p${head&&i===0?' class="verb-head"':""}>${esc(x)}</p>`).join(""); }
+function verbBlock(key){
+  const e=RB&&RB.entries&&RB.entries[key], pg=REF_PAGES[key];
+  const where=`${REF_DOC(key)}${pg?` · page ${pg}`:""}`;
+  if(e) return `<div class="verb">${fmtVerb(e.text)}</div><span class="verb-src">From your PDF · ${esc(where)}${e.row?" · table row":""}</span>`;
+  return `<p class="note">Not found in the chapters you loaded. It's in the ${esc(where)}.</p>`;
+}
+function sheetHtml(key){
+  const info=refMeta(key);
+  const tagRules=(info.tags||[]).map(tg=>[tg,GLOSS_KEY(tg)]).filter(x=>x[1]&&RB.entries[x[1]]);
+  return `<div class="sheet-backdrop" data-act="refclose"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-h"><div><span class="lbl">${esc(info.kind)}</span><h2 id="sheet-title">${esc(info.title)}</h2></div><button class="x big" data-act="refclose" aria-label="Close">×</button></div>
+    ${info.meta.length?`<div class="sheet-meta">${info.meta.map(m=>`<div><div class="k">${esc(m[0])}</div><div class="v">${esc(m[1])}</div></div>`).join("")}</div>`:""}
+    <div class="sheet-sec">${verbBlock(key)}</div>
+    ${(info.rules||[]).map(r=>`<div class="sheet-sec">${verbBlock("R:"+r)}</div>`).join("")}
+    ${tagRules.map(([tg,k])=>`<div class="sheet-sec">${verbBlock(k)}</div>`).join("")}
+  </div>`;
 }
 
 /* ---------- drift pad: an original top-down '69 fastback doing a figure-8 ---------- */
@@ -1259,6 +1553,9 @@ function startDrift(){ if(typeof requestAnimationFrame!=="function") return; if(
 function floorIt(){ DRIFT.boost=1; for(let k=0;k<14;k++){ const cv=document.getElementById("drift"); if(!cv) break; DRIFT.smoke.push({x:cv.clientWidth/2+(Math.random()-.5)*cv.clientWidth*0.7,y:cv.clientHeight/2+(Math.random()-.5)*cv.clientHeight*0.6,r:6+Math.random()*6,age:0,vx:(Math.random()-.5)*30,vy:(Math.random()-.5)*30}); } }
 
 function render(){
+  if(SHEET&&!hasRB()) SHEET=null;
+  $("#sheet").innerHTML = SHEET ? sheetHtml(SHEET) : "";
+  try{ document.documentElement.style.overflow = SHEET ? "hidden" : ""; }catch(e){}
   $("#play").hidden=view!=="play"; $("#play").innerHTML= view==="play"? renderPlay():"";
   $("#home").hidden=view!=="home"; $("#wiz").hidden=view!=="wiz"; $("#builder").hidden=view!=="builder";
   $("#home").innerHTML= view==="home"? renderHome():"";
@@ -1269,8 +1566,8 @@ function render(){
   persist();
 }
 document.addEventListener("click",e=>{ if(e.target&&e.target.closest&&e.target.closest("#driftpad")) floorIt(); });
-document.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.id==="driftpad"){ e.preventDefault(); floorIt(); } });
-document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; },true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SHEET){ SHEET=null; render(); return; } if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.id==="driftpad"){ e.preventDefault(); floorIt(); } });
+document.addEventListener("toggle",e=>{ if(e.target&&e.target.dataset&&e.target.dataset.sum) wiz.sumOpen=e.target.open; if(e.target&&e.target.dataset&&e.target.dataset.rbpanel) RBOPEN=e.target.open; },true);
 function toTop(){ try{ window.scrollTo(0,0); }catch(e){} }
 function beginWizard(){
   const b=team.example?50:team.budget, cb=team.example?false:!!team.customBudget;
@@ -1295,6 +1592,7 @@ document.addEventListener("change",e=>{
     case "budget": if(el.value==="custom"){ team.customBudget=true; } else { team.budget=+el.value; team.customBudget=false; } if(view==="wiz"&&!wiz.nTouched) wiz.n=stdCars(team.budget); break;
     case "budgetc": { const n=parseInt(el.value,10); if(n>=1&&n<=999){ team.budget=n; team.customBudget=true; } } if(view==="wiz"&&!wiz.nTouched) wiz.n=stdCars(team.budget); break;
     case "wizn": wiz.n=+el.value; wiz.nTouched=true; break;
+    case "rbfile": { const fl=[...(el.files||[])]; el.value=""; loadRulebook(fl); } return;
     case "type": v.type=el.value; break;
     case "arch": v.arch=el.value; if(v.second===(v.arch&&ARCH[v.arch][0])) v.second=""; pruneCar(v); break;
     case "second": v.second=el.value; pruneCar(v); break;
@@ -1329,6 +1627,11 @@ document.addEventListener("click",e=>{
     case "example": team=exampleTeam(); break;
     case "copy": { const code=$("#code").value; const done=()=>toast("Code copied"); try{ navigator.clipboard.writeText(code).then(done,()=>{ $("#code").select(); toast("Select-all done: copy it manually"); }); }catch(err){ $("#code").select(); toast("Select-all done: copy it manually"); } } return;
     case "goplay": view="play"; toTop(); render(); return;
+    case "ref": e.preventDefault(); if(!hasRB()) return; SHEET=el.dataset.ref; render(); try{ const xb=document.querySelector(".sheet .x"); if(xb) xb.focus(); }catch(err){} return;
+    case "refclose": SHEET=null; render(); return;
+    case "rbclear": RBCONFIRM=true; render(); return;
+    case "rbclearno": RBCONFIRM=false; render(); return;
+    case "rbclearok": RB=null; RBCONFIRM=false; SHEET=null; RBSTATUS={ok:"Rule text removed from this device."}; try{ localStorage.removeItem(LS_RB); }catch(err){} render(); return;
     case "pround": play.round=Math.max(1,play.round+(+el.dataset.d)); savePlay(); render(); return;
     case "preset": play.confirmReset=true; render(); return;
     case "presetno": play.confirmReset=false; render(); return;
