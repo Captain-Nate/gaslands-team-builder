@@ -42,14 +42,14 @@
   --bg:#121416; --panel:#1b1f23; --panel-2:#22272c; --ink:#e9ecef; --muted:#9aa4af; --line:#333a42;
   --accent:#ff7a2e; --accent-ink:#16181a; --accent-soft:#3a2416;
   --good:#51cf66; --good-soft:#1c3323; --bad:#ff6b6b; --bad-soft:#3b1d1d; --warn:#f2b84b; --warn-soft:#3a2f17;
-  --glow-1:rgba(255,122,46,.30); --glow-2:rgba(201,73,20,.18); --tape-dark:#0d0e10; --pad:#0f1113; --teal:#5cd8ff; --teal-ink:#08202a;
+  --glow-1:rgba(255,122,46,.30); --glow-2:rgba(201,73,20,.18); --tape-dark:#0d0e10; --pad:#0f1113; --teal:#3fc8ff; --teal-ink:#04161f;
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme:dark }}
 :root[data-theme="dark"]{
   --bg:#121416; --panel:#1b1f23; --panel-2:#22272c; --ink:#e9ecef; --muted:#9aa4af; --line:#333a42;
   --accent:#ff7a2e; --accent-ink:#16181a; --accent-soft:#3a2416;
   --good:#51cf66; --good-soft:#1c3323; --bad:#ff6b6b; --bad-soft:#3b1d1d; --warn:#f2b84b; --warn-soft:#3a2f17;
-  --glow-1:rgba(255,122,46,.30); --glow-2:rgba(201,73,20,.18); --tape-dark:#0d0e10; --pad:#0f1113; --teal:#5cd8ff; --teal-ink:#08202a;
+  --glow-1:rgba(255,122,46,.30); --glow-2:rgba(201,73,20,.18); --tape-dark:#0d0e10; --pad:#0f1113; --teal:#3fc8ff; --teal-ink:#04161f;
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme:dark }
 *{box-sizing:border-box}
@@ -349,6 +349,7 @@ details.glossary summary{cursor:pointer;font-weight:700}
 .ab{all:unset;box-sizing:border-box;cursor:pointer;width:30px;height:30px;border:2.5px solid var(--c,var(--ink));border-radius:50%;display:grid;place-items:center;color:var(--c-ink,var(--accent-ink));transition:background .15s,transform .15s}
 .ab.orange{--c:var(--accent);--c-ink:var(--accent-ink)}
 .ab.teal{--c:var(--teal);--c-ink:var(--teal-ink)}
+.ab.teal.used{background:radial-gradient(circle at 50% 40%, #e6f9ff 0 18%, var(--teal) 55%, #1a7fd8 100%);box-shadow:0 0 14px 1px var(--teal),0 0 4px var(--teal)}
 .ab.used{background:var(--c);box-shadow:0 0 10px -2px var(--c)}
 .ab.used svg{width:62%;height:62%}
 .ab:active{transform:scale(.92)}
